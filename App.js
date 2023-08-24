@@ -1,107 +1,75 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button, Menu, Divider } from 'react-native-paper';
-import DocumentPicker from 'react-native-document-picker';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Biitdatabasepanel from './Srcofstudent/Screenstd/Biitdatabasepanel';
+import Teacherlogin from './Teachersrc/Screentch/Teacherlogin';
+import Teacherdashboard from './Teachersrc/Screentch/Teacherdashboard';
+import Teacheruploadass from './Teachersrc/Screentch/Teacheruploadass';
+import ViewAssignment from './Teachersrc/Screentch/Teacherviewass';
+import AssignmentSolPage from './Teachersrc/Screentch/Teacherasssol';
+import Studentlogin from './Srcofstudent/Screenstd/Studentlogin';
+import Stddashboard from './Srcofstudent/Screenstd/Studentdashboard';
+import Newassignments from './Srcofstudent/Screenstd/Newassignments';
+import Studentresultscreen from './Srcofstudent/Screenstd/Studentresultscreen';
+import Mysqltutorial from './Srcofstudent/Screenstd/Mysqltutorial';
+import Tutorialinfo from './Srcofstudent/Screenstd/Tutorialinfo';
+import Databaseconnection from './Srcofstudent/Screenstd/Databaseconnection';
+import Markassignment from './Teachersrc/Screentch/Markassignment';
+import AssignmentSolution from './Srcofstudent/Screenstd/AssignmentSolution';
+import ConnectionPages from './Srcofstudent/Screenstd/Connection';
+import Querybuilders from './Srcofstudent/Screenstd/Querybuilder';
 
-const TeacherUploadAss = () => {
-  const [visible, setVisible] = React.useState(false);
-  const [semester, setSemester] = React.useState('Semester');
-  const [section, setSection] = React.useState('Section');
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-  const showMenu = () => setVisible(true);
-  const hideMenu = () => setVisible(false);
-  const handleSemesterSelect = (semester) => {
-    setSemester(semester);
-    hideMenu();
-  };
-  const handleSectionSelect = (section) => {
-    setSection(section);
-    hideMenu();
-  };
-
-  const pickFile = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(
-        result.uri,
-        result.type, // mime type
-        result.name,
-        result.size
-      );
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-      } else {
-        console.log('Error picking file:', err);
-      }
-    }
-  };
-
+function Teacherside() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Teacheruploadass</Text>
-      <View style={styles.dropdownContainer}>
-        <Menu
-          visible={visible}
-          onDismiss={hideMenu}
-          anchor={<Button onPress={showMenu}>{semester}</Button>}
-        >
-          <Menu.Item onPress={() => handleSemesterSelect('Semester 1')} title="Semester 1" />
-          <Menu.Item onPress={() => handleSemesterSelect('Semester 2')} title="Semester 2" />
-          {/* Add more semesters as needed */}
-        </Menu>
-        <Menu
-          visible={visible}
-          onDismiss={hideMenu}
-          anchor={<Button onPress={showMenu}>{section}</Button>}
-        >
-          <Menu.Item onPress={() => handleSectionSelect('Section A')} title="Section A" />
-          <Menu.Item onPress={() => handleSectionSelect('Section B')} title="Section B" />
-          {/* Add more sections as needed */}
-        </Menu>
-      </View>
-      <View style={styles.uploadContainer}>
-        <Text>Upload your file:</Text>
-        <Button onPress={pickFile}>Pick File</Button>
-      </View>
-      <Divider style={styles.divider} />
-      <View style={styles.buttonContainer}>
-        <Button mode="contained">Back</Button>
-        <Button mode="contained">Upload</Button>
-      </View>
-    </View>
+   // <NavigationContainer independent={true}>
+    <Stack.Navigator>
+      <Stack.Screen name="Biitdatabasepanel" component={Biitdatabasepanel}  options={{ headerShown: false }}/>
+      <Stack.Screen name="Teacherlogin" component={Teacherlogin} />
+      <Stack.Screen name="Teacherdashboard" component={Teacherdashboard} />
+      <Stack.Screen name="Teacheruploadass" component={Teacheruploadass} />
+      <Stack.Screen name="uploadsol" component={AssignmentSolPage} />
+      <Stack.Screen name="ViewAssignment" component={ViewAssignment} />
+      <Stack.Screen name="Markassignment" component={Markassignment} />
+      
+    </Stack.Navigator>
+ //   </NavigationContainer>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
-  },
-  dropdownContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  uploadContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  divider: {
-    marginVertical: 20,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
+function Studentside() {
+  return (
+    // <NavigationContainer independent={true}>
+    <Stack.Navigator>
+      <Stack.Screen name="Studentlogin" component={Studentlogin} />
+      <Stack.Screen name="Studentdashboard" component={Stddashboard} />
+      <Stack.Screen name="NewAss" component={Newassignments} />
+      <Stack.Screen name="Editpage" component={Querybuilders} />
+      <Stack.Screen name="AssignmentSolution" component={AssignmentSolution} />
+      <Stack.Screen name="Result" component={Studentresultscreen} />
+      <Stack.Screen name="Practice" component={Mysqltutorial} />
+      <Stack.Screen name="info" component={Tutorialinfo} />
+      <Stack.Screen name="PracScreen" component={Databaseconnection} />
+      <Stack.Screen name="ConnectionPage" component={ConnectionPages} />
+      <Stack.Screen name="Addnext" component={Querybuilders} />
+    
+      </Stack.Navigator>
+     // </NavigationContainer>
+  );
+}
 
-export default TeacherUploadAss;
+function App() {
+  return (
+    <NavigationContainer >
+      <Stack.Navigator>
+        <Stack.Screen name="Biitdatabasepanel" component={Teacherside}  options={{ headerShown: false }}/>
+        <Stack.Screen name="Studentlogin" component={Studentside} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
