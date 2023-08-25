@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.tutorapp-mergeDebugResources-27:/values-et/values-et.xml",
+            "outputFile": "com.tutorapp-mergeDebugResources-28:/values-et/values-et.xml",
             "map": [
                 {
                     "source": "C:\\Users\\pro tech\\.gradle\\caches\\transforms-3\\2869819762abc67901fd58a9b84e0d6d\\transformed\\appcompat-1.4.1\\res\\values-et\\values-et.xml",

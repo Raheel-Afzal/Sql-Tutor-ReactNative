@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
 // @react-native-picker/picker
 import com.reactnativecommunity.picker.RNCPickerPackage;
+// react-native-date-picker
+import com.henninghall.date_picker.DatePickerPackage;
 // react-native-document-picker
 import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 // react-native-file-picker
@@ -78,6 +80,7 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new ReactCheckBoxPackage(),
       new RNCPickerPackage(),
+      new DatePickerPackage(),
       new RNDocumentPickerPackage(),
       new FilePickerPackage(),
       new RNFSPackage(),
