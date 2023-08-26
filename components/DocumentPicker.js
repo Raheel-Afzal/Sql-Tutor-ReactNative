@@ -25,7 +25,7 @@ const DocumentPickerField = ({ file, setFile }) => {
                     name: res.name,
                 }
 
-                setFile(fileDetail)
+                setFile((curr)=>({...curr,file:fileDetail,QuestionText:fileDetail.name}))
             }
             else {
                 Alert.alert('Warning', 'File size must be less than 5 mb')
