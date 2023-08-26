@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Image, navigate } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import IP from '../../IP';
+import { Url } from '../../constants';
 
 const Teacherlogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [userData, setUserData] = useState(null);
+  
 
   useEffect(() => {
 
@@ -19,7 +21,7 @@ const Teacherlogin = ({ navigation }) => {
   const handleLogin = async () => {
 
     // Perform API call to verify login credentials
-    let response = await fetch(`${IP}/Teacher/Login?Temail=${email}&Tpassword=${password}`, {
+    let response = await fetch(`${Url}/Teacher/Login?Temail=${email}&Tpassword=${password}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

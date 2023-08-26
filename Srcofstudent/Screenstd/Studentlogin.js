@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Image ,navigate} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Url } from '../../constants';
 
 const Studentlogin = ({ navigation}) => {
   const [email, setEmail] = useState('');
@@ -26,7 +27,7 @@ const Studentlogin = ({ navigation}) => {
   const handleLogin = async () => {
     
     // Perform API call to verify login credentials
-    let response = await fetch(`http://192.168.0.113/FYPAPI/api/Student/Login?Semail=${email}&Spassword=${password}`, {
+    let response = await fetch(`${Url}/Student/Login?Semail=${email}&Spassword=${password}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
