@@ -1,24 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-const Stddashboard = (props) => {
+import { Url } from '../../constants';
+const Stddashboard = ({navigation,route,props}) => {
+  console.log(route.params.paramKey,'login data')
+  const [studentDetail,setStudentDetail] = useState({})
   const handleNewAssignmentPress = () => {
     props.navigation.navigate('NewAss');
   };
 
   const handleAssignmentSolutionPress = () => {
-    props.navigation.navigate('AssignmentSolution');
+    navigation.navigate('AssignmentSolution',{paramKey:studentDetail});
   };
 
   const handleResultPress = () => {
-    props.navigation.navigate('Result');
+    navigation.navigate('Result',{paramKey:studentDetail});
   };
 
   const handlePracticePress = () => {
     props.navigation.navigate('Practice');
   };
-
+  const getloginDetail  = async() =>{
+    let response = await fetch(`${Url}/Teacher/GetStudentInfoByEmail?email=${route.params.paramKey}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log(response,'response')
+    let json = await response.json()
+    console.log(json,'json')
+    setStudentDetail(json)
+  }
+useEffect(()=>{
+  getloginDetail()
+},[route.params.paramKey])
   return (
    <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
@@ -29,10 +45,10 @@ const Stddashboard = (props) => {
           <Text style={styles.buttonText}>New Assignment</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleAssignmentSolutionPress}>
-          <Text style={styles.buttonText}>Assignment Solution</Text>
+          <Text style={styles.buttonText}>My Assignment</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleResultPress}>
-          <Text style={styles.buttonText}>Result</Text>
+          <Text style={styles.buttonText}>My Result</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handlePracticePress}>
           <Text style={styles.buttonText}>Practice</Text>
