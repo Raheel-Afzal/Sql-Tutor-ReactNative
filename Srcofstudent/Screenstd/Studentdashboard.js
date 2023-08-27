@@ -45,7 +45,7 @@ useEffect(()=>{
           <Text style={styles.buttonText}>New Assignment</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleAssignmentSolutionPress}>
-          <Text style={styles.buttonText}>My Assignment</Text>
+          <Text style={styles.buttonText}>Assignment Solutions</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleResultPress}>
           <Text style={styles.buttonText}>My Result</Text>
