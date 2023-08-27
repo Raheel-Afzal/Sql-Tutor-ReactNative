@@ -85,9 +85,9 @@ const StudentResultScreen = ({navigation, route}) => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {result.map((assignment )=> {
+        {result.map((assignment,index )=> {
           return (
-            <View style={styles.assignmentContainer}>
+            <View key={index} style={styles.assignmentContainer}>
               <Text>Student {assignment?.Sid}</Text>
               <Text style={styles.assignmentTitle}>
                 {'Assignment' + ' ' + assignment.AssignmentNumber}
@@ -95,7 +95,7 @@ const StudentResultScreen = ({navigation, route}) => {
              
               <View style={styles.marksContainer}>
                
-                  <Text style={styles.marksText}>{assignment.Amarks}</Text>
+                  <Text style={styles.marksText}>Marks: {assignment.Amarks}</Text>
              
               </View>
             </View>
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   marksContainer: {
+    width:190,
     flexDirection: 'row',
     alignItems: 'center',
   },

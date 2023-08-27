@@ -13,7 +13,7 @@ const Biitdatabasepanel=(props)=>{
    };
 
    const handleStudentPress = () => {
-     props.navigation.navigate('Studentlogin');
+     props.navigation.navigate('Studentside');
    };
 
   return (

@@ -20,6 +20,7 @@ import CreateEditStudent from './Srcofstudent/Screenstd/CreateEditStudent';
 import ViewStudents from './Teachersrc/Screentch/ViewStudents';
 import ViewAssignments from './Teachersrc/Screentch/ViewAssignments';
 import MarkAssignments from './Teachersrc/Screentch/MarkAssignments';
+import Studentlogin from './Srcofstudent/Screenstd/Studentlogin';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -48,7 +49,7 @@ function Studentside() {
   return (
     // <NavigationContainer independent={true}>
     <Stack.Navigator>
-      {/* <Stack.Screen name="Studentlogin" component={Studentlogin} /> */}
+      <Stack.Screen name="Studentlogin" component={Studentlogin} />
       <Stack.Screen name="Studentdashboard" component={Stddashboard} />
       <Stack.Screen name="NewAss" component={Newassignments} />
       <Stack.Screen name="Editpage" component={Querybuilders} />
@@ -70,7 +71,7 @@ function App() {
     <NavigationContainer >
       <Stack.Navigator>
         <Stack.Screen name="TeacherLogin" component={Teacherside}  options={{ headerShown: false }}/>
-        <Stack.Screen name="Studentlogin" component={Studentside} options={{ headerShown: false }} />
+        <Stack.Screen name="Studentside" component={Studentside} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
