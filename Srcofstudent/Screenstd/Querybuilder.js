@@ -335,7 +335,7 @@ const Querybuilders = ({ route }) => {
       )}
     >
       <View style={styles.container}>
-        <Text style={styles.header}>Query Builder</Text>
+        <Text style={styles.header}>Database :{selectedDatabase}</Text>
         {/* <TouchableOpacity onPress={openDrawer} style={styles.drawerButton}>
           <Text style={styles.drawerButtonText}>Open Drawer</Text>
         </TouchableOpacity> */}

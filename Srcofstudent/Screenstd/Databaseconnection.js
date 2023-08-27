@@ -14,7 +14,7 @@ const Databaseconnection = ({ navigation }) => {
     // Fetch list of databases
     fetch(`${Url}/Teacher/GetDatabaseList`)
       .then(response => response.json())
-      .then(data => setDatabases(data.filter((dbName) => dbName.includes('FYPDB'))))
+      .then(data => setDatabases(data))
       .catch(error => console.error(error));
   }, [isFocused]);
 
