@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,32 +11,33 @@ import DocumentPickerField from '../../components/DocumentPicker';
 import DatePicker from 'react-native-date-picker'
 import { COLORS, Url, formatDate } from '../../constants';
 import { Button } from 'react-native-elements';
+import { useIsFocused } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 
 
 const Teacheruploadass = ({ navigation }) => {
 
-  
+  const isFocused = useIsFocused()
 
   const initialAssignment = {
     AssignmentNumber: '',
     Title: '',
     QuestionText: '',
     Deadline: new Date(),
-    // DatabaseName: '',
+    DatabaseName: '',
     Section: '',
     semester: '',
     file: null
   };
 
   const [assignment, setAssignment] = useState(initialAssignment);
-  // const [file, setFile] = useState(null);
+  const [databasesList, setDatabasesList] = useState([]);
+
 
   const uploadAssignment = () => {
     // Create form data
 
     const formData = new FormData();
-    formData.append('DatabaseName', 'FYPDB')
-
     // Add other assignment data to the formData object
     for (const key in assignment) {
       key == 'Deadline' ?
@@ -54,14 +55,36 @@ const Teacheruploadass = ({ navigation }) => {
 
   };
 
+  useEffect(() => {
+    // Fetch list of databases
+    fetch(`${Url}/Teacher/GetDatabaseList`)
+      .then(response => response.json())
+      .then(data => setDatabasesList(data))
+      .catch(error => console.error(error));
+  }, [isFocused]);
+  
   return (
     <View style={styles.screenContainer}>
       <CustomInput placeholder={'Enter Title'} value={assignment.Title} onChangeText={(newText) => setAssignment(curr => ({ ...curr, Title: newText }))} />
       <CustomInput placeholder={'Enter Assignment No'} value={assignment.AssignmentNumber} onChangeText={(newText) => setAssignment(curr => ({ ...curr, AssignmentNumber: newText }))} />
-      <CustomInput placeholder={'Enter Section'} value={assignment.Section} onChangeText={(newText) => setAssignment(curr => ({ ...curr, Section: newText }))} />
-      <CustomInput placeholder={'Enter Semester'} value={assignment.semester} onChangeText={(newText) => setAssignment(curr => ({ ...curr, semester: newText }))} />
+
+      <View style={{ flexDirection: 'row', width: 150, gap: 20 }}>
+        <CustomInput placeholder={'Enter Section'} value={assignment.Section} onChangeText={(newText) => setAssignment(curr => ({ ...curr, Section: newText }))} />
+        <CustomInput placeholder={'Enter Semester'} value={assignment.semester} onChangeText={(newText) => setAssignment(curr => ({ ...curr, semester: newText }))} />
+      </View>
+      <Text>Select DataBase</Text>
+      <Picker
+        selectedValue={assignment.DatabaseName}
+        onValueChange={(newValue) => setAssignment(curr => ({ ...curr, DatabaseName: newValue }))}
+      >
+        {databasesList.map((dataBaseName, index) => (
+          <Picker.Item key={index} label={dataBaseName} value={dataBaseName} />
+        ))}
+
+      </Picker>
       <DatePicker style={styles.itemContainer} date={assignment.Deadline} onDateChange={(newDate) => { setAssignment(curr => ({ ...curr, Deadline: newDate })) }} />
       <DocumentPickerField file={assignment.file} setFile={setAssignment} />
+
       <Button title={"Upload"} raised onPress={() => uploadAssignment()} />
     </View>
   );
@@ -75,19 +98,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
-  headerText: {
-    fontSize: 32,
-    fontWeight: 700,
-    color: 'white',
-    paddingVertical: 10,
-    marginHorizontal: 10,
-    borderRadius: 12,
-    backgroundColor: '#394791',
-    textAlign: 'center',
-    marginVertical: 20
-
-
-  },
   itemContainer: {
     marginRight: 10,
     alignItems: 'center',
@@ -100,4 +110,5 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     paddingVertical: 10,
   },
+  
 })
