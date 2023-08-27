@@ -31,6 +31,9 @@ const Teacherdashboard = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewAssignments')}>
           <Text style={styles.buttonText}>View Assignment</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MarkAssignments')}>
+          <Text style={styles.buttonText}>Mark Assignment</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudents')}>
           <Text style={styles.buttonText}>View Student</Text>
         </TouchableOpacity>

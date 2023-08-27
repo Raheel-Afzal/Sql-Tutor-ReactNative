@@ -13,13 +13,13 @@ import Studentresultscreen from './Srcofstudent/Screenstd/Studentresultscreen';
 import Mysqltutorial from './Srcofstudent/Screenstd/Mysqltutorial';
 import Tutorialinfo from './Srcofstudent/Screenstd/Tutorialinfo';
 import Databaseconnection from './Srcofstudent/Screenstd/Databaseconnection';
-import Markassignment from './Teachersrc/Screentch/Markassignment';
 import AssignmentSolution from './Srcofstudent/Screenstd/AssignmentSolution';
 import ConnectionPages from './Srcofstudent/Screenstd/Connection';
 import Querybuilders from './Srcofstudent/Screenstd/Querybuilder';
 import CreateEditStudent from './Srcofstudent/Screenstd/CreateEditStudent';
 import ViewStudents from './Teachersrc/Screentch/ViewStudents';
 import ViewAssignments from './Teachersrc/Screentch/ViewAssignments';
+import MarkAssignments from './Teachersrc/Screentch/MarkAssignments';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -35,7 +35,7 @@ function Teacherside() {
       <Stack.Screen name="uploadsol" component={AssignmentSolPage} />
       <Stack.Screen name="ViewStudents" component={ViewStudents} />
       <Stack.Screen name="ViewAssignments" component={ViewAssignments} />
-      <Stack.Screen name="Markassignment" component={Markassignment} />
+      <Stack.Screen name="MarkAssignments" component={MarkAssignments} />
       <Stack.Screen name="CreateEditStudent" component={CreateEditStudent}/>
 
       
