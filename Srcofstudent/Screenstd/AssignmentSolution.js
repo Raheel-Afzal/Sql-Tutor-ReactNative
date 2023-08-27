@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import {Url} from '../../constants';
+import axios from 'axios';
 const AssignmentSolution = ({ navigation,route }) => {
   const [assignments, setAssignments] = useState([
     { id: 1, title: 'Assignment 1', checked: false, url: 'https://gbihr.org/images/docs/test.pdf', topic: ' Outputting Data Order By' , section:'BsCS A' , label:'Fall 2023 Semester 2'},
@@ -15,9 +16,32 @@ const AssignmentSolution = ({ navigation,route }) => {
     // For now, open the URL in the device's default browser
     Linking.openURL(url);
   };
+  const handleDownload = (solutionId) => {
+    axios({
+      url: 'http://localhost/FYPAPI/api/Student/DownloadSolution',
+      method: 'GET',
+      responseType: 'blob',
+      params: {
+        solutionId: solutionId,
+      },
+    })
+      .then((response) => {
+        // Create a temporary link element
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `solution_${solutionId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      })
+      .catch((error) => {
+        console.error('Error downloading solution:', error);
+      });
+  };
   const getAssignmentSolution = async () => {
     let response = await fetch(
-      `${Url}/Student/GetAssgs?Smester=${route.params.paramKey.Semester}&section=${route.params.paramKey.Section}`,
+      `${Url}/Student/GetSolutions?section=${route.params.paramKey.Section}&Semester=${route.params.paramKey.Semester}`,
       {
         method: 'GET',
         headers: {
@@ -38,15 +62,15 @@ const AssignmentSolution = ({ navigation,route }) => {
       <View style={styles.container}>
         <Text style={styles.header}>Assignment Solutions</Text>
         <ScrollView style={styles.assignmentScrollView}>
-          {assignments.map((assignment) => (
+          {assignmentSolution.map((assignment) => (
             <TouchableOpacity key={assignment.id} onPress={() => handleOpenFile(assignment.url)}>
               <View style={styles.assignmentBox}>
-                <Text style={styles.assignmentNumber}>{assignment.title}</Text>
-                <Text style={styles.assignmentInfo}>URL: {assignment.url}</Text>
-                <Text style={styles.assignmentInfo}> label:{assignment.label}</Text>
-                <Text style={styles.assignmentInfo}>section: {assignment.section}</Text>
-                <Text style={styles.assignmentInfo}>topic: {assignment.topic}</Text>
-                <TouchableOpacity onPress={() => handleOpenFile(assignment.url)}>
+                <Text style={styles.assignmentNumber}>Assignment{assignment?.AssignmentNumber}</Text>
+                {/* <Text style={styles.assignmentInfo}>URL: {assignment.url}</Text>
+                <Text style={styles.assignmentInfo}> label:{assignment.label}</Text> */}
+                <Text style={styles.assignmentInfo}>Section: {assignment?.Section}</Text>
+                <Text style={styles.assignmentInfo}>Semester: {assignment?.Semester}</Text>
+                <TouchableOpacity onPress={() => handleDownload(assignment.SolutionId)}>
                   <Text style={styles.downloadText}>Download</Text>
                 </TouchableOpacity>
               </View>

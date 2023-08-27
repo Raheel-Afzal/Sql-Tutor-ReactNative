@@ -42,7 +42,10 @@ useEffect(()=>{
           <Text style={styles.headerText}>Student Dashboard</Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleNewAssignmentPress}>
-          <Text style={styles.buttonText}>My Assignment</Text>
+          <Text style={styles.buttonText}>New Assignment</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleAssignmentSolutionPress}>
+          <Text style={styles.buttonText}>Assignment Solutions</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.button} onPress={handleAssignmentSolutionPress}>
           <Text style={styles.buttonText}>My Assignment</Text>
