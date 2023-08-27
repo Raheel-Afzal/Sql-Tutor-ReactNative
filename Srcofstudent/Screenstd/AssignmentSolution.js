@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native';
-
-const AssignmentSolution = ({ navigation }) => {
+import {Url} from '../../constants';
+const AssignmentSolution = ({ navigation,route }) => {
   const [assignments, setAssignments] = useState([
     { id: 1, title: 'Assignment 1', checked: false, url: 'https://gbihr.org/images/docs/test.pdf', topic: ' Outputting Data Order By' , section:'BsCS A' , label:'Fall 2023 Semester 2'},
     { id: 2, title: 'Assignment 2', checked: false, url: 'https://filesamples.com/formats/pdf',  topic: ' Find Intersection of 2 Tables' , section:'BsIT B' , label:'Fall 2023 Semester 6' },
@@ -9,13 +9,30 @@ const AssignmentSolution = ({ navigation }) => {
     { id: 4, title: 'Assignment 4', checked: false, url: 'https://icseindia.org/document/sample.pdf',  topic: ' Modifying and Deleting Tables' , section:' BsAI B' , label:'Fall 2023 Semester 7'},
     { id: 5, title: 'Assignment 5', checked: false, url: 'https://www.novapdf.com/wpub/downloads/samples/pdf-example-bookmarks.pdf',  topic: ' UNION' , section:'BsSE B' , label:'Fall 2023 Semester 3' },
   ]);
-
+  const [assignmentSolution,setAssignmentSolution] = useState([])
   const handleOpenFile = (url) => {
     // Perform any desired action when a file is opened
     // For now, open the URL in the device's default browser
     Linking.openURL(url);
   };
-
+  const getAssignmentSolution = async () => {
+    let response = await fetch(
+      `${Url}/Student/GetAssgs?Smester=${route.params.paramKey.Semester}&section=${route.params.paramKey.Section}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log(response, 'response');
+    let json = await response.json();
+    console.log(json, 'json');
+    setAssignmentSolution(json);
+  };
+  useEffect(() => {
+    getAssignmentSolution();
+  }, [route.params.paramKey]);
   return (
     <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
