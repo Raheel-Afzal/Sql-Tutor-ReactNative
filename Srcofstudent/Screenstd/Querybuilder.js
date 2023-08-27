@@ -8,10 +8,13 @@ import {
   StyleSheet,
   DrawerLayoutAndroid,
 } from 'react-native';
+import { Url } from '../../constants';
 
-const Querybuilders = () => {
+const Querybuilders = ({ route }) => {
+  const { selectedDatabase } = route.params;
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState('Result');
+  const [results, setResults] = useState([])
   const [accordionData, setAccordionData] = useState([
     {
       id: 1,
@@ -92,24 +95,43 @@ const Querybuilders = () => {
   ]);
   const [expandedAccordion, setExpandedAccordion] = useState(null);
 
+
+  const handleRunQuery = async () => {
+    try {
+      const response = await fetch(
+        // `http://localhost/FYPAPI/api/Student/RunQuery?sqlQuery=${finalQuery}`
+        `${Url}/QueryRun/RunQuery?databaseName=${selectedDatabase}&query=${query}`,
+        {
+          method: "POST"
+        }
+      );
+      const data = await response.json();
+      console.log('data: ', data);
+      setResults(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleInput = (char) => {
     setQuery(query + char);
   };
 
-  const handleBackspace = () => {
-    setQuery(query.slice(0, -1));
-  };
+  // const handleBackspace = () => {
+  //   setQuery(query.slice(0, -1));
+  // };
 
-  const handleClear = () => {
-    setQuery('');
-  };
+  // const handleClear = () => {
+  //   setQuery('');
+  // };
 
-  const handleSpace = () => {
-    setQuery(query + '  ');
-  };
+  // const handleSpace = () => {
+  //   setQuery(query + '  ');
+  // };
 
   const handleExecute = () => {
     // TODO: Handle execute button press
+    handleRunQuery()
     console.log('Execute button pressed');
   };
 
@@ -129,7 +151,7 @@ const Querybuilders = () => {
   const handleKeywords = () => {
     setActiveTab('Keywords');
   };
-   const toggleAccordion = (index) => {
+  const toggleAccordion = (index) => {
     if (expandedAccordion === index) {
       setExpandedAccordion(null);
     } else {
@@ -199,7 +221,35 @@ const Querybuilders = () => {
 
   const renderContent = () => {
     if (activeTab === 'Result') {
-      return <Text style={styles.content}>Result Content</Text>;
+      return (
+        <View style={styles.content}>
+          {
+            results.length == 0 ?
+              <Text >Result Content</Text>
+              :
+              <ScrollView  horizontal={true} vertical={true}>
+                <View>
+                  <ScrollView horizontal>
+                    <View style={styles.tableHeaderView}>
+                      {Object.keys(results[0]).map((key) => (
+                        <Text style={styles.tableHeaderText} key={key}>{key}</Text>
+                      ))}
+                    </View>
+                  </ScrollView>
+                  <ScrollView style={{ height: 280 }}>
+                    {results.map((result, index) => (
+                      <View key={'v' + index} style={styles.tableHeaderView}>
+                        {Object.values(result).map((value, index) => (
+                          <Text style={styles.tableBodyText} key={index}>{value}</Text>
+                        ))}
+                      </View>
+                    ))}
+                  </ScrollView>
+                </View>
+              </ScrollView>
+          }
+        </View>
+      );
     } else if (activeTab === 'Sample') {
       return (
         <ScrollView>
@@ -239,7 +289,7 @@ const Querybuilders = () => {
     }
   };
 
- const drawerRef = React.createRef();
+  const drawerRef = React.createRef();
 
   const openDrawer = () => {
     drawerRef.current.openDrawer();
@@ -286,9 +336,9 @@ const Querybuilders = () => {
     >
       <View style={styles.container}>
         <Text style={styles.header}>Query Builder</Text>
-        <TouchableOpacity onPress={openDrawer} style={styles.drawerButton}>
+        {/* <TouchableOpacity onPress={openDrawer} style={styles.drawerButton}>
           <Text style={styles.drawerButtonText}>Open Drawer</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.notepadContainer}>
           <TextInput
             style={styles.notepad}
@@ -324,7 +374,7 @@ const Querybuilders = () => {
           <TouchableOpacity style={styles.button} onPress={handleExecute}>
             <Text style={styles.buttonText}>Execute</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
+          {/* <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleBackspace}>
@@ -335,7 +385,7 @@ const Querybuilders = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleSpace}>
             <Text style={styles.buttonText}>Space</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </DrawerLayoutAndroid>
@@ -347,6 +397,26 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
+  },
+  tableHeaderText: {
+    padding: 5,
+    fontWeight: 'bold',
+    borderWidth: 0.5,
+    height: 30,
+    width: 80
+
+  },
+  tableHeaderView: {
+    flexDirection: 'row',
+
+  },
+  tableBodyText: {
+    // padding: 5,
+    width: 80,
+    height:20,
+    textAlign:'center',
+    borderWidth: 0.3
+
   },
   drawerContainer: {
     flex: 1,
@@ -423,12 +493,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   keyboardText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    // fontWeight: 'bold',
   },
   keyboard1Text: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    // fontWeight: 'bold',
   },
   keyboard: {
     borderWidth: 2,
@@ -445,17 +515,19 @@ const styles = StyleSheet.create({
   keyboardKey: {
     backgroundColor: '#fff',
     borderRadius: 5,
-    padding: 3,
+    padding: 10,
     borderWidth: 1,
-    width: '20%',
+    margin: 5,
+    // width: '20%',
     alignItems: 'center',
   },
   keyboard1Key: {
     backgroundColor: '#fff',
     borderRadius: 5,
-    padding: 3,
+    padding: 5,
     borderWidth: 1,
-    width: '20%',
+    margin: 5,
+    // width: '0%',
     alignItems: 'center',
   },
   keyboardRow: {
@@ -468,10 +540,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 10,
   },
- button: {
+  button: {
     padding: 10,
     backgroundColor: '#4682B4',
-    width: '20%',
+    width: '100%',
     height: 40,
     borderRadius: 20,
     alignItems: 'center',
@@ -491,7 +563,7 @@ const styles = StyleSheet.create({
   checkboxText: {
     marginLeft: 5,
   },
-   accordionItem: {
+  accordionItem: {
     marginBottom: 10,
   },
   accordionTitle: {
