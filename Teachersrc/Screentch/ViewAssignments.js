@@ -58,9 +58,6 @@ const ViewAssignments = ({ navigation }) => {
               <Text style={styles.dateText}>Semester: {student.Semester}</Text>
               <Text style={styles.fileURLText}>Section: {student.Section}</Text>
               <View style={styles.actionBtnContainer}>
-                <TouchableOpacity style={[styles.actionBtn, styles.editBtn]} onPress={() => { navigation.navigate('CreateEditStudent', { path: 'Edit', studentData: student }) }}>
-                  <Text style={styles.actionBtnText} >Edit</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={[styles.actionBtn, styles.deleteBtn]} onPress={() => handleDelete(student.Sid)}>
                   <Text style={styles.actionBtnText} >Remove</Text>
                 </TouchableOpacity>
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: 10,
-    justifyContent: 'center'
+    justifyContent: 'flex-end'
   },
   actionBtn: {
     borderRadius: 12,
