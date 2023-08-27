@@ -48,9 +48,9 @@ const ViewAssignments = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.headerText}>View Assignment</Text>
             <ScrollView style={styles.scrollView}>
-                {assignments.map((assignment) => (
+                {assignments.map((assignment,index) => (
                     <TouchableOpacity
-                        key={assignment.Sid}
+                        key={index}
                         style={styles.assignmentContainer}
                     >
                         <View style={styles.assignmentBox}>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {Url} from '../../constants';
-const StudentResultScreen = ({navigation, route}) => {
+import { Url } from '../../constants';
+import { FlatList } from 'react-native';
+const StudentResultScreen = ({ navigation, route }) => {
   console.log(route.params.paramKey, 'route.params.paramKey');
   const student = {
     name: 'Ali Ahmed',
@@ -17,36 +18,7 @@ const StudentResultScreen = ({navigation, route}) => {
   };
   const [result, setResult] = useState([]);
   console.log(result, 'result');
-  const assignments = [
-    {
-      id: 1,
-      title: 'Assignment 1',
-      marks: 2,
-      topic: 'Query with X product',
-      date: 'June 1, 2023',
-    },
-    {
-      id: 2,
-      title: 'Assignment 2',
-      marks: 10,
-      topic: 'Query with join',
-      date: 'June 5, 2023',
-    },
-    {
-      id: 3,
-      title: 'Assignment 3',
-      marks: 5,
-      topic: 'Query syntax test',
-      date: 'June 10, 2023',
-    },
-    {
-      id: 4,
-      title: 'Assignment 4',
-      marks: 8,
-      topic: 'Query with where',
-      date: 'June 15, 2023',
-    },
-  ];
+
   const getResult = async () => {
     let response = await fetch(
       `${Url}/Teacher/marks?Sid=${route.params.paramKey.Sid}`,
@@ -84,24 +56,41 @@ const StudentResultScreen = ({navigation, route}) => {
         </Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {result.map((assignment,index )=> {
+      <FlatList
+        data={result}
+        renderItem={({ item ,index}) => (
+          <View key={index} style={styles.assignmentContainer}>
+            <Text>Student {item?.Sid}</Text>
+            <Text style={styles.assignmentTitle}>
+              {'Assignment' + ' ' + item.AssignmentNumber}
+            </Text>
+
+            <View style={styles.marksContainer}>
+
+              <Text style={styles.marksText}>Marks: {item.Amarks}</Text>
+
+            </View>
+          </View>
+        )}
+      />
+      {/* <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {result.map((assignment, index) => {
           return (
             <View key={index} style={styles.assignmentContainer}>
               <Text>Student {assignment?.Sid}</Text>
               <Text style={styles.assignmentTitle}>
                 {'Assignment' + ' ' + assignment.AssignmentNumber}
               </Text>
-             
+
               <View style={styles.marksContainer}>
-               
-                  <Text style={styles.marksText}>Marks: {assignment.Amarks}</Text>
-             
+
+                <Text style={styles.marksText}>Marks: {assignment.Amarks}</Text>
+
               </View>
             </View>
           );
         })}
-      </ScrollView>
+      </ScrollView> */}
 
       <TouchableOpacity
         style={styles.button}
@@ -145,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   scrollContainer: {
-    flex:1
+    flex: 1
   },
   assignmentContainer: {
     backgroundColor: '#fff',
@@ -164,7 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   marksContainer: {
-    width:190,
+    width: 190,
     flexDirection: 'row',
     alignItems: 'center',
   },

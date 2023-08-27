@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Alert,
-
 } from 'react-native';
 import { CustomInput } from '../../components/CustomInput';
 import DocumentPickerField from '../../components/DocumentPicker';
@@ -15,7 +14,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 
 
-const Teacheruploadass = ({ navigation }) => {
+const Teacheruploadass = ({navigation}) => {
 
   const isFocused = useIsFocused()
 
@@ -50,7 +49,12 @@ const Teacheruploadass = ({ navigation }) => {
     fetch(`${Url}/Teacher/AssgmentEntry`, {
       method: 'POST',
       body: formData,
-    }).then(response => console.log('response', response))
+    }).then(response => {
+      if (response.ok) {
+        alert('File Uploaded')
+        navigation.goBack()
+      }
+    })
 
 
   };
@@ -62,7 +66,7 @@ const Teacheruploadass = ({ navigation }) => {
       .then(data => setDatabasesList(data))
       .catch(error => console.error(error));
   }, [isFocused]);
-  
+
   return (
     <View style={styles.screenContainer}>
       <CustomInput placeholder={'Enter Title'} value={assignment.Title} onChangeText={(newText) => setAssignment(curr => ({ ...curr, Title: newText }))} />
@@ -110,5 +114,5 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     paddingVertical: 10,
   },
-  
+
 })

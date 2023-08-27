@@ -75,7 +75,7 @@ const MarkAssignments = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>View Assignment</Text>
+      <Text style={styles.headerText}>Marks Assignment</Text>
       <ScrollView style={styles.scrollView}>
         {assignments.map((assignment, index) => (
           <View
@@ -83,7 +83,7 @@ const MarkAssignments = ({ navigation }) => {
             style={styles.assignmentContainer}
           >
             <View style={styles.assignmentBox}>
-              <Text style={styles.titleText}>{`${assignment.Fname}  ${assignment.Lname} (BCS ${assignment.Semester}${assignment.Section})`}</Text>
+              <Text style={styles.titleText}>{`id: ${assignment.Sid} - ${assignment.Fname}  ${assignment.Lname} (BCS ${assignment.Semester}${assignment.Section})`}</Text>
               <Text style={styles.titleText}>Assignment Number: {assignment.AssignmentNumber}</Text>
               <Text style={styles.titleText}>Qno: {assignment.Qno}</Text>
               <Text style={styles.descriptionText}>{assignment.Qdetails}</Text>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: 'row',
     marginVertical: 10,
-    justifyContent: 'flex-end'
+    justifyContent: 'center'
   },
   actionBtn: {
     marginVertical: 5,
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   },
   titleText: {
     textAlign: 'center',
-    marginVertical: 10,
-    fontSize: 18,
+    marginVertical: 5,
+    fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
   },

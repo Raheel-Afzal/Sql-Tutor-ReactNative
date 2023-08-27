@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import { Url } from '../../constants';
 
 const Newassignments = ({ navigation }) => {
   const [assignments, setAssignments] = useState([
     { id: 1, title: 'Assignment 1', checked: false, url: 'https://gbihr.org/images/docs/test.pdf', Database: 'FYP2', lastDate: '2023-06-08 18:00PM' },
-    { id: 2, title: 'Assignment 2', checked: false, url: 'https://filesamples.com/formats/pdf', Database: 'Task1',  lastDate: '2023-06-10 14:00PM' },
+    { id: 2, title: 'Assignment 2', checked: false, url: 'https://filesamples.com/formats/pdf', Database: 'Task1', lastDate: '2023-06-10 14:00PM' },
     { id: 3, title: 'Assignment 3', checked: false, url: 'https://www.ucd.ie/t4cms/Test%20PDF-8mb.pdf', Database: 'Task2', lastDate: '2023-06-13 12:00AM' },
     { id: 4, title: 'Assignment 4', checked: false, url: 'https://icseindia.org/document/sample.pdf', Database: 'Task3', lastDate: '2023-06-16 20:00AM' },
     { id: 5, title: 'Assignment 5', checked: false, url: 'https://www.novapdf.com/wpub/downloads/samples/pdf-example-bookmarks.pdf', Database: 'Task4', lastDate: '2023-06-18 16:00PM' },
@@ -18,8 +19,28 @@ const Newassignments = ({ navigation }) => {
     Linking.openURL(url);
   };
   const handlesolve = () => {
-     navigation.navigate('Editpage');
-   };
+    navigation.navigate('Editpage');
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `${Url}/Student/GetSavedQueryData?sid=${Studentid}`
+      );
+      const data = await response.json();
+
+      // Sort the data by assignment number
+      const sortedData = data.sort((a, b) => a.AssignmentNumber - b.AssignmentNumber);
+
+      setQueryData(sortedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
@@ -37,9 +58,9 @@ const Newassignments = ({ navigation }) => {
                 <TouchableOpacity onPress={() => handleOpenFile(assignment.url)}>
                   <Text style={styles.downloadText}>Download</Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={handlesolve}>
-           <Text style={styles.downloadText}>Solve</Text>
-         </TouchableOpacity>
+                <TouchableOpacity onPress={handlesolve}>
+                  <Text style={styles.downloadText}>Solve</Text>
+                </TouchableOpacity>
               </View>
             </TouchableOpacity>
           ))}

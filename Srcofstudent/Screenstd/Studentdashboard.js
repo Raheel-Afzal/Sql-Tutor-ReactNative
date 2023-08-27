@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Url } from '../../constants';
-const Stddashboard = ({navigation,route,props}) => {
+const Stddashboard = ({navigation,route}) => {
   console.log(route.params.paramKey,'login data')
   const [studentDetail,setStudentDetail] = useState({})
   const handleNewAssignmentPress = () => {
-    props.navigation.navigate('NewAss');
+    navigation.navigate('NewAss');
   };
 
   const handleAssignmentSolutionPress = () => {
@@ -18,7 +18,7 @@ const Stddashboard = ({navigation,route,props}) => {
   };
 
   const handlePracticePress = () => {
-    props.navigation.navigate('Practice');
+    navigation.navigate('Practice');
   };
   const getloginDetail  = async() =>{
     let response = await fetch(`${Url}/Teacher/GetStudentInfoByEmail?email=${route.params.paramKey}`, {
@@ -42,11 +42,11 @@ useEffect(()=>{
           <Text style={styles.headerText}>Student Dashboard</Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleNewAssignmentPress}>
-          <Text style={styles.buttonText}>New Assignment</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleAssignmentSolutionPress}>
           <Text style={styles.buttonText}>My Assignment</Text>
         </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.button} onPress={handleAssignmentSolutionPress}>
+          <Text style={styles.buttonText}>My Assignment</Text>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.button} onPress={handleResultPress}>
           <Text style={styles.buttonText}>My Result</Text>
         </TouchableOpacity>

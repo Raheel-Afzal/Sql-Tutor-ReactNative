@@ -3,20 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react
 import { useNavigation } from '@react-navigation/native';
 
 const Teacherdashboard = ({ navigation }) => {
-  const handleuploadassignmentPress = () => {
-    props.navigation.navigate('Teacheruploadass');
-  };
-
-  const handleViewStudentPress = () => {
-    props.navigation.navigate('ViewStudents');
-  };
-
-  const handleUpLoadSolutionPress = () => {
-    props.navigation.navigate('uploadsol');
-    //console.log('uploadsol')
-  };
-
-
 
   return (
 
@@ -37,7 +23,7 @@ const Teacherdashboard = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudents')}>
           <Text style={styles.buttonText}>View Student</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleUpLoadSolutionPress}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('uploadsol')}>
           <Text style={styles.buttonText}>UpLoad Solution</Text>
         </TouchableOpacity>
 

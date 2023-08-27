@@ -1,178 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, ImageBackground, ScrollView, Alert, Linking } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import { CustomInput } from '../../components/CustomInput';
+import DocumentPickerField from '../../components/DocumentPicker';
+import { COLORS, Url } from '../../constants';
+import { Button } from 'react-native-elements';
+import { useIsFocused } from '@react-navigation/native';
+import axios from 'axios';
+
 
 const AssignmentSolPage = ({ navigation }) => {
-  const [fileUris, setFileUris] = useState([]);
 
-  const pickFile = async () => {
+  const isFocused = useIsFocused()
+
+  const initialAssignment = {
+    AssignmentNumber: '',
+    section: '',
+    semester: '',
+    file: null
+  };
+
+  const [solution, setSolution] = useState(initialAssignment);
+
+
+  const handleSolutionUpload = async () => {
+    const formData = new FormData();
+    formData.append('file', solution.file);
+    console.log('formData: ', formData);
+
     try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-        multiple: true,
-      });
-      const newUris = res.map((file) => ({
-        uri: file.uri,
-        name: file.name,
-        uploadTime: new Date().toLocaleString(),
-      }));
-      setFileUris([...fileUris, ...newUris]);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the file selection
-        console.log('User cancelled file picker');
-      } else {
-        // Error occurred while picking the file
-        console.log('Error picking file:', err);
-        Alert.alert('Error', 'Failed to pick file. Please try again.');
-      }
+      // console.log(`${Url}/Student/UploadSolution?assignmentNumber=${solution.AssignmentNumber}&semester=${solution.semester}&section=${solution.section}`)
+      await axios.post(`${Url}/Student/UploadSolution?assignmentNumber=${solution.AssignmentNumber}&semester=${solution.semester}&section=${solution.section}`, formData);
+      // File upload successful
+      alert('Assignment solution uploaded successfully.');
+      navigation.goBack()
+
+    } catch (error) {
+      console.log('>>>>>error',error)
+      // Handle the error
+      alert('Error uploading file:');
     }
   };
 
-  const openFile = (fileUri) => {
-    Linking.openURL(fileUri);
-  };
-
-  const cancelFile = (index) => {
-    const updatedFileUris = [...fileUris];
-    updatedFileUris.splice(index, 1);
-    setFileUris(updatedFileUris);
-  };
-
-  useEffect(() => {
-    const deletionTimer = setTimeout(() => {
-      setFileUris([]);
-      // Perform additional deletion logic here, such as deleting the file from the server
-    }, 60 * 60 * 1000); // 1 hour in milliseconds
-
-    return () => {
-      clearTimeout(deletionTimer);
-    };
-  }, []);
-  const handleUploadButton = () => {
-  // Handle upload logic here
-  alert('File uploaded successfully!');
-};
 
   return (
-    <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Upload Solution</Text>
-
-        <ScrollView style={styles.fileContainer}>
-          {fileUris.length > 0 ? (
-            fileUris.map((file, index) => (
-              <View key={index} style={styles.fileBox}>
-                <Text style={styles.fileText}>
-                  Selected File {index + 1}: {file.name}
-                </Text>
-                <Text style={styles.uploadTimeText}>Uploaded on: {file.uploadTime}</Text>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.downloadButton} onPress={() => openFile(file.uri)}>
-                    <Text style={styles.buttonText}>Download</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.cancelButton} onPress={() => cancelFile(index)}>
-                    <Text style={styles.buttonText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.noFileText}>No files selected</Text>
-          )}
-        </ScrollView>
-
-        <TouchableOpacity style={styles.button} onPress={pickFile}>
-          <Text style={styles.buttonText}>Select File</Text>
-        </TouchableOpacity>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('StudentDashboard')}>
-            <Text style={styles.buttonText}>Back</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={handleUploadButton}>
-            <Text style={styles.buttonText}>Upload</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ImageBackground>
+    <View style={styles.screenContainer}>
+      <CustomInput placeholder={'Enter Assignment Number'} value={solution.AssignmentNumber} onChangeText={(newText) => setSolution(curr => ({ ...curr, AssignmentNumber: newText }))} />
+      <CustomInput placeholder={'Enter Semester No'} value={solution.semester} onChangeText={(newText) => setSolution(curr => ({ ...curr, semester: newText }))} />
+      <CustomInput placeholder={'Enter Section '} value={solution.section} onChangeText={(newText) => setSolution(curr => ({ ...curr, section: newText }))} />
+      <DocumentPickerField file={solution.file} setFile={setSolution} />
+      <Button title={"Upload"} raised onPress={() => handleSolutionUpload()} />
+    </View>
   );
 };
 
-const styles = {
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  title: {
-    fontSize: 33,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 80,
-    marginTop: 40, // Added marginTop to move the title to the top
-  },
-  fileContainer: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginTop: 20,
-  },
-  fileBox: {
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 8,
-  },
-  fileText: {
-    fontSize: 15,
-  },
-  uploadTimeText: {
-    fontSize: 12,
-    marginBottom: 5,
-    color: 'gray',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  downloadButton: {
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    borderRadius: 40,
-    alignSelf: 'flex-start',
-  },
-  cancelButton: {
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    borderRadius: 40,
-    alignSelf: 'flex-start',
-  },
-  noFileText: {
-    fontSize: 15,
-    textAlign: 'center',
-    fontStyle: 'italic',
-    marginTop: 10,
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  button: {
-    backgroundColor: '#4682B4',
-    padding: 10,
-    margin: 10,
-    borderRadius: 40,
-  },
-  buttonText: {
-    fontSize: 25,
-    textAlign: 'center',
-  },
-};
 
 export default AssignmentSolPage;
+const styles = StyleSheet.create({
+  screenContainer: {
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  itemContainer: {
+    marginRight: 10,
+    alignItems: 'center',
+    shadowColor: '#00000080',
+    elevation: 5,
+    shadowOffset: { width: 1, height: 2 },
+    shadowRadius: 4,
+    shadowOpacity: 0.26,
+    backgroundColor: COLORS.secondry,
+    marginVertical: 12,
+    paddingVertical: 10,
+  },
+
+})
