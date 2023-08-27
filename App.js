@@ -6,9 +6,7 @@ import Biitdatabasepanel from './Srcofstudent/Screenstd/Biitdatabasepanel';
 import Teacherlogin from './Teachersrc/Screentch/Teacherlogin';
 import Teacherdashboard from './Teachersrc/Screentch/Teacherdashboard';
 import Teacheruploadass from './Teachersrc/Screentch/Teacheruploadass';
-import ViewAssignment from './Teachersrc/Screentch/Teacherviewass';
 import AssignmentSolPage from './Teachersrc/Screentch/Teacherasssol';
-import Studentlogin from './Srcofstudent/Screenstd/Studentlogin';
 import Stddashboard from './Srcofstudent/Screenstd/Studentdashboard';
 import Newassignments from './Srcofstudent/Screenstd/Newassignments';
 import Studentresultscreen from './Srcofstudent/Screenstd/Studentresultscreen';
@@ -19,6 +17,9 @@ import Markassignment from './Teachersrc/Screentch/Markassignment';
 import AssignmentSolution from './Srcofstudent/Screenstd/AssignmentSolution';
 import ConnectionPages from './Srcofstudent/Screenstd/Connection';
 import Querybuilders from './Srcofstudent/Screenstd/Querybuilder';
+import CreateEditStudent from './Srcofstudent/Screenstd/CreateEditStudent';
+import ViewStudents from './Teachersrc/Screentch/ViewStudents';
+import ViewAssignments from './Teachersrc/Screentch/ViewAssignments';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,8 +33,11 @@ function Teacherside() {
       <Stack.Screen name="Teacherdashboard" component={Teacherdashboard} />
       <Stack.Screen name="Teacheruploadass" component={Teacheruploadass} />
       <Stack.Screen name="uploadsol" component={AssignmentSolPage} />
-      <Stack.Screen name="ViewAssignment" component={ViewAssignment} />
+      <Stack.Screen name="ViewStudents" component={ViewStudents} />
+      <Stack.Screen name="ViewAssignments" component={ViewAssignments} />
       <Stack.Screen name="Markassignment" component={Markassignment} />
+      <Stack.Screen name="CreateEditStudent" component={CreateEditStudent}/>
+
       
     </Stack.Navigator>
  //   </NavigationContainer>
@@ -44,7 +48,7 @@ function Studentside() {
   return (
     // <NavigationContainer independent={true}>
     <Stack.Navigator>
-      <Stack.Screen name="Studentlogin" component={Studentlogin} />
+      {/* <Stack.Screen name="Studentlogin" component={Studentlogin} /> */}
       <Stack.Screen name="Studentdashboard" component={Stddashboard} />
       <Stack.Screen name="NewAss" component={Newassignments} />
       <Stack.Screen name="Editpage" component={Querybuilders} />
@@ -65,7 +69,7 @@ function App() {
   return (
     <NavigationContainer >
       <Stack.Navigator>
-        <Stack.Screen name="Biitdatabasepanel" component={Teacherside}  options={{ headerShown: false }}/>
+        <Stack.Screen name="TeacherLogin" component={Teacherside}  options={{ headerShown: false }}/>
         <Stack.Screen name="Studentlogin" component={Studentside} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
