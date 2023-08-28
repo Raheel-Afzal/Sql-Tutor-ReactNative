@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingLeft: 52,
         fontSize: 16,
-        marginVertical: 10
+        marginVertical: 5
     },
     icon: {
         height: 20,

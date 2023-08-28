@@ -8,27 +8,19 @@ const Teacherlogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [userData, setUserData] = useState(null);
-  
 
-  useEffect(() => {
-
-    if (userData) {
-      const { Temail, Tpassword } = userData;
-    }
-  }, [userData]);
 
   const handleLogin = async () => {
 
-    // Perform API call to verify login credentials
-    let response = await fetch(`${Url}/Teacher/Login?Temail=${email}&Tpassword=${password}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    let json = await response.json()
-    console.log(json)
+    // // Perform API call to verify login credentials
+    // let response = await fetch(`${Url}/Teacher/Login?Temail=${email}&Tpassword=${password}`, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // let json = await response.json()
+    // console.log(json)
     navigation.navigate('Teacherdashboard');
   };
 

@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import { COLORS, Url } from '../../constants';
+import { useIsFocused } from '@react-navigation/native';
 
-const Newassignments = ({ navigation }) => {
+const Newassignments = ({ navigation, route }) => {
+  const isFocused = useIsFocused()
+  const [queryData, setQueryData] = useState([]);
+
+  const { sid, Semester, Section } = route.params.studentDetail
+  console.log('studentDetail: ', route);
   const [assignments, setAssignments] = useState([
     { id: 1, title: 'Assignment 1', checked: false, url: 'https://gbihr.org/images/docs/test.pdf', Database: 'FYP2', lastDate: '2023-06-08 18:00PM' },
-    { id: 2, title: 'Assignment 2', checked: false, url: 'https://filesamples.com/formats/pdf', Database: 'Task1',  lastDate: '2023-06-10 14:00PM' },
+    { id: 2, title: 'Assignment 2', checked: false, url: 'https://filesamples.com/formats/pdf', Database: 'Task1', lastDate: '2023-06-10 14:00PM' },
     { id: 3, title: 'Assignment 3', checked: false, url: 'https://www.ucd.ie/t4cms/Test%20PDF-8mb.pdf', Database: 'Task2', lastDate: '2023-06-13 12:00AM' },
     { id: 4, title: 'Assignment 4', checked: false, url: 'https://icseindia.org/document/sample.pdf', Database: 'Task3', lastDate: '2023-06-16 20:00AM' },
     { id: 5, title: 'Assignment 5', checked: false, url: 'https://www.novapdf.com/wpub/downloads/samples/pdf-example-bookmarks.pdf', Database: 'Task4', lastDate: '2023-06-18 16:00PM' },
@@ -12,36 +19,64 @@ const Newassignments = ({ navigation }) => {
     { id: 7, title: 'Assignment 7', checked: false, url: 'SampleDocs-sample-pdf-file.pdf', Database: 'Task6', lastDate: '2023-09-08 22:00PM' },
   ]);
 
-  const handleOpenFile = (url) => {
-    // Perform any desired action when a file is opened
-    // For now, open the URL in the device's default browser
-    Linking.openURL(url);
+  const handleOpenFile = (assignmentId) => {
+    const downloadUrl = `${Url}/Student/DownloadSolution?assignmentId=${assignmentId}`;
+
+    Linking.openURL(downloadUrl);
   };
-  const handlesolve = () => {
-     navigation.navigate('Editpage');
-   };
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch data from the API
+        const response = await fetch(`${Url}/Student/GetAssgs?Smester=${Semester}&section=${Section}`);
+        const data = await response.json();
+        const sortedAssignments = data.sort((a, b) => a.AssignmentNumber - b.AssignmentNumber);
+        // console.log('sortedAssignments: ', sortedAssignments);
+
+        // Update state with the fetched data
+        setAssignments(sortedAssignments);
+
+
+      } catch (error) {
+        console.error("Error fetching data:>>>", error);
+      }
+    };
+    if (Semester && Section)
+      fetchData();
+  }, [Semester, Section]);
+
+  const isOverDue = (Deadline) => {
+    if (new Date(Deadline) < new Date()) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
 
   return (
     <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
-        <Text style={styles.header}>Assignments</Text>
         <Text style={styles.title}>New Assignments</Text>
         <ScrollView style={styles.assignmentScrollView}>
-          {assignments.map((assignment) => (
-            <TouchableOpacity key={assignment.id} onPress={() => handleOpenFile(assignment.url)}>
+          {assignments.map((assignment, index) => (
+            <View key={index} >
               <View style={styles.assignmentBox}>
-                <Text style={styles.assignmentNumber}>{assignment.title}</Text>
-                <Text style={styles.assignmentInfo}>URL: {assignment.url}</Text>
-                <Text style={styles.assignmentInfo}>Database {assignment.Database}</Text>
-                <Text style={styles.assignmentInfo}>Last Date: {assignment.lastDate}</Text>
-                <TouchableOpacity onPress={() => handleOpenFile(assignment.url)}>
+                <Text style={styles.assignmentNumber}>{assignment.Title}</Text>
+                <Text style={styles.assignmentInfo}>Due Data: {isOverDue(assignment.Deadline) ? "Due Date is Over" : new Date(assignment.Deadline).toLocaleDateString()}</Text>
+                <Text style={styles.assignmentInfo}>Database {assignment.DatabaseName}</Text>
+                <TouchableOpacity onPress={() => handleOpenFile(assignment.Aid)}>
                   <Text style={styles.downloadText}>Download</Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={handlesolve}>
-           <Text style={styles.downloadText}>Solve</Text>
-         </TouchableOpacity>
+                <TouchableOpacity disabled={isOverDue(assignment.Deadline)} onPress={() => navigation.navigate('Addnext', { selectedDatabase: assignment.DatabaseName })}>
+                  <Text style={[styles.downloadText, { color: isOverDue(assignment.Deadline) ? COLORS.red : COLORS.blueColor }]}>Solve</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
         <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>

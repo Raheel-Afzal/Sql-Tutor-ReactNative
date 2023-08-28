@@ -1,41 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import MSSQL from 'react-native-mssql';
+import { useIsFocused } from '@react-navigation/native';
+import { Url } from '../../constants';
 
-const Databaseconnection = (props) => {
-  const [database, setDatabase] = useState('');
+const Databaseconnection = ({ navigation }) => {
+  const isFocused = useIsFocused()
+
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://192.168.137.207/FYPAPI/api/Student/GetAllDatabases');
-        const jsonData = await response.json();
-        setDatabases(jsonData);
-      } catch (error) {
-        console.log('Error fetching data:', error);
-      }
-    };
+    // Fetch list of databases
+    fetch(`${Url}/Teacher/GetDatabaseList`)
+      .then(response => response.json())
+      .then(data => setDatabases(data))
+      .catch(error => console.error(error));
+  }, [isFocused]);
 
-    fetchData();
-  }, []);
-
-   const handleStudentPress = () => {
-     props.navigation.navigate('Addnext');
-   };
-
-  const handleDatabaseChange = (itemValue) => {
-    setDatabase(itemValue);
-    setSelectedDatabase(databases.find(db => db.name === itemValue));
-  };
-
-  const renderDatabaseOptions = () => {
-    return databases.map((db, index) => (
-      <Picker.Item key={index} label={db.name} value={db.name} />
-    ));
-  };
 
   return (
     <View style={styles.container}>
@@ -48,18 +30,19 @@ const Databaseconnection = (props) => {
         <View style={styles.dropdownContainer}>
           <Picker
             style={styles.dropdown}
-            selectedValue={database}
-            onValueChange={handleDatabaseChange}
+            selectedValue={selectedDatabase}
+            onValueChange={(newValue) => setSelectedDatabase(newValue)}
           >
-            <Picker.Item label=" DATABASE" value="" />
-            <Picker.Item label="FYP2" value="FYP2" />
-            {renderDatabaseOptions()}
+            {databases.map((dataBaseName, index) => (
+              <Picker.Item key={index} label={dataBaseName} value={dataBaseName} />
+            ))}
+
           </Picker>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleStudentPress}>
-           <Text style={styles.buttonText}>ADD</Text>
-         </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Addnext', { selectedDatabase })}>
+              <Text style={styles.buttonText}>ADD</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>
@@ -93,18 +76,18 @@ const styles = StyleSheet.create({
     height: 50,
     width: 170,
     marginHorizontal: 10,
-    color: 'black',
+    color: '',
     backgroundColor: 'grey',
   },
   buttonContainer: {
     width: '80%',
     marginBottom: 20,
   },
- buttonText: {
+  buttonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 20,
-    
+
   },
   button: {
     backgroundColor: '#4682B4',

@@ -34,8 +34,16 @@ const Studentlogin = ({ navigation}) => {
       }
     })
     let json = await response.json()
-    console.log(json)
-    navigation.navigate('Studentdashboard');
+    console.log(json,'data')
+    if(json?.Message == "Invalid User plz check Email & password"){
+      alert("Invalid User please input the correct credentials")
+    }else{
+     
+      navigation.navigate('Studentdashboard', {
+        paramKey: email,
+      });
+    }
+   
       // .then(response => response.json())
       // .then(data => {
       //   if (data.success === true) {
