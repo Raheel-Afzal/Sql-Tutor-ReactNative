@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Url } from '../../constants';
 const Stddashboard = ({ navigation, route }) => {
-  console.log(route.params.paramKey, 'login data')
-  console.log(route.params, 'login Sid')
+  // console.log(route.params.paramKey, 'login data')
+  // console.log(route.params, 'login Sid')
   const [studentDetail, setStudentDetail] = useState({})
 
 
@@ -24,6 +24,8 @@ const Stddashboard = ({ navigation, route }) => {
 
 
   const getloginDetail = async () => {
+  console.log(route.params.paramKey, 'getloginDetail')
+
     let response = await fetch(`${Url}/Teacher/GetStudentInfoByEmail?email=${route.params.paramKey}`, {
       method: 'GET',
       headers: {

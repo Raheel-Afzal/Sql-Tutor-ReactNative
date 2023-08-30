@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     padding: 5,
     fontWeight: 'bold',
     borderWidth: 0.5,
-    height: 30,
+    height: 40,
     width: 80
 
   },

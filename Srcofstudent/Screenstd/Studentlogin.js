@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Image ,navigate} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Image, navigate } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Url } from '../../constants';
 
-const Studentlogin = ({ navigation}) => {
+const Studentlogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [loader, setLoader] = useState(true)
 
   useEffect(() => {
-    
+
     if (userData) {
       const { Semail, Spassword } = userData;
 
-    //  if (Semail === email && Spassword === password) {
+      //  if (Semail === email && Spassword === password) {
 
       //   console.log('login sueccessfully');
       // } else {
@@ -25,7 +26,7 @@ const Studentlogin = ({ navigation}) => {
   }, [userData]);
 
   const handleLogin = async () => {
-    
+    setLoader(true)
     // Perform API call to verify login credentials
     let response = await fetch(`${Url}/Student/Login?Semail=${email}&Spassword=${password}`, {
       method: 'GET',
@@ -34,43 +35,43 @@ const Studentlogin = ({ navigation}) => {
       }
     })
     let json = await response.json()
-    console.log(json,'data')
-    if(json?.Message == "Invalid User plz check Email & password"){
+    console.log(json, 'data')
+
+    if (!response.ok) {
       alert("Invalid User please input the correct credentials")
-    }else{
-     
+    } else {
       navigation.navigate('Studentdashboard', {
         paramKey: email,
       });
     }
-   
-      // .then(response => response.json())
-      // .then(data => {
-      //   if (data.success === true) {
-      //     // Fetch user data after successful login
-      //     fetch(`http://192.168.2.193/FYPAPI/api/Student/GetUserData`, {
-      //       method: 'GET',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //         Authorization: `Bearer ${data.token}` // Assuming the server returns an access token
-      //       }
-      //     })
-      //       .then(response => response.json())
-      //       .then(userData => {
-      //         setUserData(userData);
-      //       })
-      //       .catch(error => {
-      //         console.error('Error fetching user data:', error);
-      //       });
-      //   } else {
-          
-      //     console.log('Login unsuccessful');
-      //   }
-      // })
-      // .catch(error => {
-      //   console.error('Error performing login:', error);
-      // });
-    
+
+    // .then(response => response.json())
+    // .then(data => {
+    //   if (data.success === true) {
+    //     // Fetch user data after successful login
+    //     fetch(`http://192.168.2.193/FYPAPI/api/Student/GetUserData`, {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `Bearer ${data.token}` // Assuming the server returns an access token
+    //       }
+    //     })
+    //       .then(response => response.json())
+    //       .then(userData => {
+    //         setUserData(userData);
+    //       })
+    //       .catch(error => {
+    //         console.error('Error fetching user data:', error);
+    //       });
+    //   } else {
+
+    //     console.log('Login unsuccessful');
+    //   }
+    // })
+    // .catch(error => {
+    //   console.error('Error performing login:', error);
+    // });
+
   };
 
   return (
@@ -79,7 +80,7 @@ const Studentlogin = ({ navigation}) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>BIIT DATABASE TUTOR</Text>
         </View>
-        <Image source={require('../../images/bitlogo.jpg')} style={styles.image}  />
+        <Image source={require('../../images/bitlogo.jpg')} style={styles.image} />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -101,7 +102,7 @@ const Studentlogin = ({ navigation}) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>{loader ? 'Login' : 'please wait...'}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
@@ -114,27 +115,27 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    
+
   },
   container: {
     flex: 1,
-    
+
     alignItems: 'center',
     justifyContent: 'center',
   },
   header: {
-    marginBottom:50,
-    margin:38,
+    marginBottom: 50,
+    margin: 38,
   },
   headerText: {
     fontSize: 32,
     fontWeight: 'bold',
-    
+
   },
   image: {
     width: 130,
     height: 130,
-    
+
     borderRadius: 150,
   },
   input: {
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     fontSize: 17,
     fontWeight: 'bold',
-    Color:'white',
+    Color: 'white',
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -166,8 +167,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 18,
     fontWeight: 'bold',
-    color:'white',
-    
+    color: 'white',
+
   },
   button: {
     backgroundColor: '#4682B4',
