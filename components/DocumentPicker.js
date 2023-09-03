@@ -25,7 +25,7 @@ const DocumentPickerField = ({ file, setFile }) => {
                     name: res.name,
                 }
 
-                setFile((curr)=>({...curr,file:fileDetail,QuestionText:fileDetail.name}))
+                setFile((curr)=>({...curr,assignFile:fileDetail}))
             }
             else {
                 Alert.alert('Warning', 'File size must be less than 5 mb')
@@ -72,7 +72,7 @@ const DocumentPickerField = ({ file, setFile }) => {
                                 style={{
                                     color: 'grey',
                                     width: '100%',
-                                    marginTop:10,
+                                    marginTop:15,
                                     alignSelf: 'center',
                                     fontSize: 12,
                                     fontWeight: 'bold',
@@ -92,9 +92,8 @@ const DocumentPickerField = ({ file, setFile }) => {
                 )
             }
             <TouchableOpacity style={styles.filePicker} onPress={selectFile}>
-                <Image source={ICONS.docPick} style={styles.docIcon} />
+                <Text style={{color:'white'}}>Browse</Text>
             </TouchableOpacity>
-            <Text style={styles.size}>max size: 5 MB</Text>
         </View>
     );
 };
@@ -119,7 +118,7 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         width: '97%',
-        marginRight: 10,
+        // marginRight: 10,
         alignItems: 'center',
         shadowColor: '#00000080',
         elevation: 12,
@@ -135,23 +134,21 @@ const styles = StyleSheet.create({
 
     filePickerContainer: {
         width: '80%',
-        height: 45,
-        borderWidth: 0.7,
-        borderColor: 'grey',
+        height: 30,
         alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
     },
     filePicker: {
-        width: '85%',
-        height: 45,
-        borderRadius: 30,
+        backgroundColor:COLORS.blueColor,
+        // width: '85%',
+        padding:5,
+        paddingHorizontal:10,
+        borderRadius:50,
         marginTop: 10,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
     },
     docIcon: {
         width: 25,
@@ -164,7 +161,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     applyBtn: {
-        width: '100%',
+        // width: '10%',
         height: 45,
         backgroundColor: '#f79007',
         alignSelf: 'center',
@@ -175,7 +172,7 @@ const styles = StyleSheet.create({
     },
     applyBtnText: {
         color: '#FFFFFF',
-        fontSize: 14,
+        fontSize: 12,
         marginBottom: 4,
     },
    

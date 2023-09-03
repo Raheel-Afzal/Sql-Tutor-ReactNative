@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const Teacherdashboard = ({ navigation }) => {
-
+const Teacherdashboard = ({ navigation ,route}) => {
+let {userDetail} = route.params
   return (
 
     <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
@@ -11,7 +11,7 @@ const Teacherdashboard = ({ navigation }) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Teacher Dashboard</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Teacheruploadass')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Teacheruploadass',{path:'create' ,userDetail})}>
           <Text style={styles.buttonText}>Upload Assignment</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewAssignments')}>
