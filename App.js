@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Biitdatabasepanel from './Srcofstudent/Screenstd/Biitdatabasepanel';
 import Teacherlogin from './Teachersrc/Screentch/Teacherlogin';
 import Teacherdashboard from './Teachersrc/Screentch/Teacherdashboard';
-import Teacheruploadass from './Teachersrc/Screentch/Teacheruploadass';
 import AssignmentSolPage from './Teachersrc/Screentch/Teacherasssol';
 import Stddashboard from './Srcofstudent/Screenstd/Studentdashboard';
 import Newassignments from './Srcofstudent/Screenstd/Newassignments';
@@ -21,6 +20,7 @@ import ViewStudents from './Teachersrc/Screentch/ViewStudents';
 import ViewAssignments from './Teachersrc/Screentch/ViewAssignments';
 import MarkAssignments from './Teachersrc/Screentch/MarkAssignments';
 import Studentlogin from './Srcofstudent/Screenstd/Studentlogin';
+import TeacheruploadassWithQuestionText from './Teachersrc/Screentch/TeacheruploadassWithQuestionText';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,7 +32,7 @@ function Teacherside() {
       <Stack.Screen name="Biitdatabasepanel" component={Biitdatabasepanel}  options={{ headerShown: false }}/>
       <Stack.Screen name="Teacherlogin" component={Teacherlogin} />
       <Stack.Screen name="Teacherdashboard" component={Teacherdashboard} />
-      <Stack.Screen name="Teacheruploadass" component={Teacheruploadass} />
+      <Stack.Screen name="Teacheruploadass" component={TeacheruploadassWithQuestionText} />
       <Stack.Screen name="uploadsol" component={AssignmentSolPage} />
       <Stack.Screen name="ViewStudents" component={ViewStudents} />
       <Stack.Screen name="ViewAssignments" component={ViewAssignments} />

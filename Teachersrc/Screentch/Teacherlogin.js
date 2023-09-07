@@ -1,36 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Image, navigate } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+  Image,
+  navigate,
+  ActivityIndicator,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import IP from '../../IP';
-import { Url } from '../../constants';
+import {Url} from '../../constants';
 
-const Teacherlogin = ({ navigation }) => {
+const Teacherlogin = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loader, setLoader] = useState(false);
 
   const handleLogin = async () => {
+    // Perform API call to verify login credentials
+    setLoader(true);
+    {
+      try {
+        let response = await fetch(
+          `${Url}/Teacher/LoginTeacher?Temail=${email}&Tpassword=${password}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        setLoader(false);
 
-    // // Perform API call to verify login credentials
-    // let response = await fetch(`${Url}/Teacher/Login?Temail=${email}&Tpassword=${password}`, {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    // let json = await response.json()
-    // console.log(json)
-    navigation.navigate('Teacherdashboard');
+        if (response.ok) {
+          let json = await response.json();
+          navigation.navigate('Teacherdashboard', {userDetail: json});
+        } else if (response.status == 404) {
+          let json = await response.json();
+          alert(json);
+        } else {
+          alert('login failed');
+        }
+      } catch (error) {
+        alert(error)
+        setLoader(false);
+      }
+    }
   };
 
   return (
-    <ImageBackground source={require('../../images/bgkimage3.png')} style={styles.backgroundImage}>
+    <ImageBackground
+      source={require('../../images/bgkimage3.png')}
+      style={styles.backgroundImage}>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerText}>BIIT DATABASE TUTOR</Text>
         </View>
-        <Image source={require('../../images/bitlogo.jpg')} style={styles.image} />
+        <Image
+          source={require('../../images/bitlogo.jpg')}
+          style={styles.image}
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -47,12 +80,21 @@ const Teacherlogin = ({ navigation }) => {
             onChangeText={setPassword}
             value={password}
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.showPassword}>
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)}
+            style={styles.showPassword}>
             <Text>{showPassword ? 'Hide' : 'Show'}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+        <TouchableOpacity
+          disabled={loader}
+          style={styles.button}
+          onPress={handleLogin}>
+          {loader ? (
+            <ActivityIndicator size={'large'} />
+          ) : (
+            <Text style={styles.buttonText}>Login</Text>
+          )}
         </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>

@@ -45,7 +45,7 @@ const AssignmentSolution = ({ navigation, route }) => {
         <Text style={styles.header}>Assignment Solutions</Text>
         <ScrollView style={styles.assignmentScrollView}>
           {assignmentSolution.map((assignment, index) => (
-            <TouchableOpacity key={index} onPress={() => handleOpenFile(assignment.url)}>
+            <View key={index} >
               <View style={styles.assignmentBox}>
                 <Text style={styles.assignmentNumber}>Assignment{assignment?.AssignmentNumber}</Text>
                 {/* <Text style={styles.assignmentInfo}>URL: {assignment.url}</Text>
@@ -56,7 +56,7 @@ const AssignmentSolution = ({ navigation, route }) => {
                   <Text style={styles.downloadText}>Download</Text>
                 </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
         <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>

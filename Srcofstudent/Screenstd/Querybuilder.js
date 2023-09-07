@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,93 +8,176 @@ import {
   StyleSheet,
   DrawerLayoutAndroid,
 } from 'react-native';
-import { Url } from '../../constants';
+import {Url} from '../../constants';
+import axios from 'axios';
+import {ActivityIndicator} from 'react-native';
 
-const Querybuilders = ({ route }) => {
-  const { selectedDatabase } = route.params;
+const Querybuilders = ({route}) => {
+  const {selectedDatabase} = route.params;
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState('Result');
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState([]);
+  const [tableDataLoader, setTableDataLoader] = useState(false);
+  const [data, setDate] = useState([
+    {
+      ColumnNames: ['imageid', 'dressid', 'dressimage'],
+      TableName: 'DRESSIMAGE',
+    },
+    {
+      ColumnNames: [
+        'uid',
+        'did',
+        'type',
+        'name',
+        'rent',
+        'size',
+        'color',
+        'descriptin',
+        'geneder',
+        'quality',
+        'rating',
+        'status',
+      ],
+      TableName: 'DRESSINFO',
+    },
+    {
+      ColumnNames: ['feedback_id', 'oid', 'rid', 'did', 'feedback'],
+      TableName: 'FEEDBACK',
+    },
+    {
+      ColumnNames: [
+        'historyid',
+        'renterid',
+        'oid',
+        'dressid',
+        'rentstartdate',
+        'rentenddate',
+        'pickingdate',
+      ],
+      TableName: 'HISTORY',
+    },
+    {
+      ColumnNames: ['fav_id', 'userid', 'oid'],
+      TableName: 'OWNERFAVORITE',
+    },
+    {
+      ColumnNames: [
+        'rentid',
+        'renterid',
+        'oid',
+        'dressid',
+        'rentstartdate',
+        'rentenddate',
+        'pickingdate',
+        'requeststatus',
+      ],
+      TableName: 'RENT',
+    },
+    {
+      ColumnNames: [
+        'id',
+        'name',
+        'contact',
+        'city',
+        'address',
+        'gender',
+        'email',
+        'password',
+        'orating',
+        'urating',
+      ],
+      TableName: 'USERINFO',
+    },
+    {
+      ColumnNames: [
+        'wislist_id',
+        'requesterid',
+        'dressid',
+        'dress_status',
+        'availabilty_date',
+      ],
+      TableName: 'WHISHLIST',
+    },
+  ]);
   const [accordionData, setAccordionData] = useState([
     {
       id: 1,
       title: 'Amarks',
       data: [
-        { id: 1, categoryId: 1, label: 'Sid', checked: false },
-        { id: 2, categoryId: 1, label: 'Aid', checked: false },
-        { id: 3, categoryId: 1, label: 'Amarks', checked: false },
+        {id: 1, categoryId: 1, label: 'Sid', checked: false},
+        {id: 2, categoryId: 1, label: 'Aid', checked: false},
+        {id: 3, categoryId: 1, label: 'Amarks', checked: false},
       ],
     },
     {
       id: 2,
       title: 'Assignment',
       data: [
-        { id: 4, categoryId: 2, label: 'Aid', checked: false },
-        { id: 5, categoryId: 2, label: 'Atitle', checked: false },
-        { id: 6, categoryId: 2, label: 'Details', checked: false },
+        {id: 4, categoryId: 2, label: 'Aid', checked: false},
+        {id: 5, categoryId: 2, label: 'Atitle', checked: false},
+        {id: 6, categoryId: 2, label: 'Details', checked: false},
       ],
     },
     {
       id: 3,
       title: 'Course',
       data: [
-        { id: 7, categoryId: 3, label: 'Cid', checked: false },
-        { id: 8, categoryId: 3, label: 'Cname', checked: false },
+        {id: 7, categoryId: 3, label: 'Cid', checked: false},
+        {id: 8, categoryId: 3, label: 'Cname', checked: false},
       ],
     },
     {
       id: 4,
       title: 'Enrollment',
       data: [
-        { id: 9, categoryId: 4, label: 'Sid', checked: false },
-        { id: 10, categoryId: 4, label: 'Cid', checked: false },
+        {id: 9, categoryId: 4, label: 'Sid', checked: false},
+        {id: 10, categoryId: 4, label: 'Cid', checked: false},
       ],
     },
     {
       id: 5,
       title: 'Query',
       data: [
-        { id: 11, categoryId: 5, label: 'Qid', checked: false },
-        { id: 12, categoryId: 5, label: 'Sid', checked: false },
-        { id: 13, categoryId: 5, label: 'Aid', checked: false },
-        { id: 14, categoryId: 5, label: 'Qno', checked: false },
-        { id: 15, categoryId: 5, label: 'Details', checked: false },
+        {id: 11, categoryId: 5, label: 'Qid', checked: false},
+        {id: 12, categoryId: 5, label: 'Sid', checked: false},
+        {id: 13, categoryId: 5, label: 'Aid', checked: false},
+        {id: 14, categoryId: 5, label: 'Qno', checked: false},
+        {id: 15, categoryId: 5, label: 'Details', checked: false},
       ],
     },
     {
       id: 6,
       title: 'Student',
       data: [
-        { id: 16, categoryId: 6, label: 'Fname', checked: false },
-        { id: 17, categoryId: 6, label: 'Lname', checked: false },
-        { id: 18, categoryId: 6, label: 'Smester', checked: false },
-        { id: 19, categoryId: 6, label: 'Section', checked: false },
-        { id: 20, categoryId: 6, label: 'Semail', checked: false },
-        { id: 21, categoryId: 6, label: 'Spassword', checked: false },
+        {id: 16, categoryId: 6, label: 'Fname', checked: false},
+        {id: 17, categoryId: 6, label: 'Lname', checked: false},
+        {id: 18, categoryId: 6, label: 'Smester', checked: false},
+        {id: 19, categoryId: 6, label: 'Section', checked: false},
+        {id: 20, categoryId: 6, label: 'Semail', checked: false},
+        {id: 21, categoryId: 6, label: 'Spassword', checked: false},
       ],
     },
     {
       id: 7,
       title: 'Teach',
       data: [
-        { id: 22, categoryId: 7, label: 'Tid', checked: false },
-        { id: 23, categoryId: 7, label: 'Cid', checked: false },
+        {id: 22, categoryId: 7, label: 'Tid', checked: false},
+        {id: 23, categoryId: 7, label: 'Cid', checked: false},
       ],
     },
     {
       id: 8,
       title: 'Teacher',
       data: [
-        { id: 24, categoryId: 8, label: 'Tid', checked: false },
-        { id: 25, categoryId: 8, label: 'Fname', checked: false },
-        { id: 26, categoryId: 8, label: 'Lname', checked: false },
-        { id: 27, categoryId: 8, label: 'Temail', checked: false },
-        { id: 28, categoryId: 8, label: 'Tpassword', checked: false },
+        {id: 24, categoryId: 8, label: 'Tid', checked: false},
+        {id: 25, categoryId: 8, label: 'Fname', checked: false},
+        {id: 26, categoryId: 8, label: 'Lname', checked: false},
+        {id: 27, categoryId: 8, label: 'Temail', checked: false},
+        {id: 28, categoryId: 8, label: 'Tpassword', checked: false},
       ],
     },
   ]);
   const [expandedAccordion, setExpandedAccordion] = useState(null);
-
 
   const handleRunQuery = async () => {
     try {
@@ -102,8 +185,8 @@ const Querybuilders = ({ route }) => {
         // `http://localhost/FYPAPI/api/Student/RunQuery?sqlQuery=${finalQuery}`
         `${Url}/QueryRun/RunQuery?databaseName=${selectedDatabase}&query=${query}`,
         {
-          method: "POST"
-        }
+          method: 'POST',
+        },
       );
       const data = await response.json();
       console.log('data: ', data);
@@ -113,8 +196,8 @@ const Querybuilders = ({ route }) => {
     }
   };
 
-  const handleInput = (char) => {
-    setQuery(query + char);
+  const handleInput = char => {
+    setQuery(query + ' ' + char);
   };
 
   // const handleBackspace = () => {
@@ -131,7 +214,7 @@ const Querybuilders = ({ route }) => {
 
   const handleExecute = () => {
     // TODO: Handle execute button press
-    handleRunQuery()
+    handleRunQuery();
     console.log('Execute button pressed');
   };
 
@@ -151,7 +234,7 @@ const Querybuilders = ({ route }) => {
   const handleKeywords = () => {
     setActiveTab('Keywords');
   };
-  const toggleAccordion = (index) => {
+  const toggleAccordion = index => {
     if (expandedAccordion === index) {
       setExpandedAccordion(null);
     } else {
@@ -159,7 +242,7 @@ const Querybuilders = ({ route }) => {
     }
   };
   const handleCheckboxChange = (accordionIndex, itemIndex) => {
-    setAccordionData((prevState) => {
+    setAccordionData(prevState => {
       const newData = [...prevState];
       const accordionItem = newData[accordionIndex];
       const checkboxItem = accordionItem.data[itemIndex];
@@ -223,31 +306,34 @@ const Querybuilders = ({ route }) => {
     if (activeTab === 'Result') {
       return (
         <View style={styles.content}>
-          {
-            results.length == 0 ?
-              <Text >Result Content</Text>
-              :
-              <ScrollView  horizontal={true} vertical={true}>
-                <View>
-                  <ScrollView horizontal>
-                    <View style={styles.tableHeaderView}>
-                      {Object.keys(results[0]).map((key) => (
-                        <Text style={styles.tableHeaderText} key={key}>{key}</Text>
+          {results.length == 0 ? (
+            <Text>Result Content</Text>
+          ) : (
+            <ScrollView horizontal={true} vertical={true}>
+              <View>
+                <ScrollView horizontal>
+                  <View style={styles.tableHeaderView}>
+                    {Object.keys(results[0]).map(key => (
+                      <Text style={styles.tableHeaderText} key={key}>
+                        {key}
+                      </Text>
+                    ))}
+                  </View>
+                </ScrollView>
+                <ScrollView style={{height: 280}}>
+                  {results.map((result, index) => (
+                    <View key={'v' + index} style={styles.tableHeaderView}>
+                      {Object.values(result).map((value, index) => (
+                        <Text style={styles.tableBodyText} key={index}>
+                          {value}
+                        </Text>
                       ))}
                     </View>
-                  </ScrollView>
-                  <ScrollView style={{ height: 280 }}>
-                    {results.map((result, index) => (
-                      <View key={'v' + index} style={styles.tableHeaderView}>
-                        {Object.values(result).map((value, index) => (
-                          <Text style={styles.tableBodyText} key={index}>{value}</Text>
-                        ))}
-                      </View>
-                    ))}
-                  </ScrollView>
-                </View>
-              </ScrollView>
-          }
+                  ))}
+                </ScrollView>
+              </View>
+            </ScrollView>
+          )}
         </View>
       );
     } else if (activeTab === 'Sample') {
@@ -259,8 +345,7 @@ const Querybuilders = ({ route }) => {
                 <TouchableOpacity
                   key={`key-${keyIndex}`}
                   style={styles.keyboard1Key}
-                  onPress={() => handleInput(key)}
-                >
+                  onPress={() => handleInput(key)}>
                   <Text style={styles.keyboard1Text}>{key}</Text>
                 </TouchableOpacity>
               ))}
@@ -277,8 +362,7 @@ const Querybuilders = ({ route }) => {
                 <TouchableOpacity
                   key={`key-${keyIndex}`}
                   style={styles.keyboardKey}
-                  onPress={() => handleInput(key)}
-                >
+                  onPress={() => handleInput(key)}>
                   <Text style={styles.keyboardText}>{key}</Text>
                 </TouchableOpacity>
               ))}
@@ -299,6 +383,20 @@ const Querybuilders = ({ route }) => {
     drawerRef.current.closeDrawer();
   };
 
+  useEffect(() => {
+    if (selectedDatabase) {
+      console.log('>>>selectedDatabase: ', selectedDatabase);
+      const selectTableDetails = async () => {
+        setTableDataLoader(true);
+        let response = await axios.get(
+          `${Url}/Teacher/GetTableColumns?databaseName=${selectedDatabase}`,
+        );
+        setTableDataLoader(false);
+        console.log('response: ', response.data);
+      };
+      selectTableDetails();
+    }
+  }, [selectedDatabase]);
 
   return (
     <DrawerLayoutAndroid
@@ -308,12 +406,26 @@ const Querybuilders = ({ route }) => {
       renderNavigationView={() => (
         <View style={styles.drawerContainer}>
           <Text style={styles.drawerHeader}>Drawer data</Text>
-          {accordionData.map((item, index) => (
+          {data.map((item, index) => (
             <TouchableOpacity
               key={`accordion-${index}`}
               style={styles.accordionItem}
-              onPress={() => toggleAccordion(index)}
-            >
+              onPress={() => toggleAccordion(index)}>
+              <Text style={styles.accordionTitle}>{item.TableName}</Text>
+              {expandedAccordion === index && (
+                <View style={styles.accordionContent}>
+                  {item.ColumnNames.map((columnName, itemIndex) => (
+                    <Text key={`CN-${itemIndex}`} style={{fontSize:16,marginVertical:2,paddingLeft:20}}>{columnName}</Text>
+                  ))}
+                </View>
+              )}
+            </TouchableOpacity>
+          ))}
+          {/* {accordionData.map((item, index) => (
+            <TouchableOpacity
+              key={`accordion-${index}`}
+              style={styles.accordionItem}
+              onPress={() => toggleAccordion(index)}>
               <Text style={styles.accordionTitle}>{item.title}</Text>
               {expandedAccordion === index && (
                 <View style={styles.accordionContent}>
@@ -321,24 +433,33 @@ const Querybuilders = ({ route }) => {
                     <TouchableOpacity
                       key={`checkbox-${itemIndex}`}
                       style={styles.checkboxItem}
-                      onPress={() => handleCheckboxChange(index, itemIndex)}
-                    >
-                      <Text style={styles.checkboxLabel}>{checkboxItem.label}</Text>
-                      {checkboxItem.checked && <Text style={styles.checkboxChecked}>✓</Text>}
+                      onPress={() => handleCheckboxChange(index, itemIndex)}>
+                      <Text style={styles.checkboxLabel}>
+                        {checkboxItem.label}
+                      </Text>
+                      {checkboxItem.checked && (
+                        <Text style={styles.checkboxChecked}>✓</Text>
+                      )}
                     </TouchableOpacity>
                   ))}
                 </View>
               )}
             </TouchableOpacity>
-          ))}
+          ))} */}
         </View>
-      )}
-    >
+      )}>
       <View style={styles.container}>
         <Text style={styles.header}>Database :{selectedDatabase}</Text>
-        {/* <TouchableOpacity onPress={openDrawer} style={styles.drawerButton}>
-          <Text style={styles.drawerButtonText}>Open Drawer</Text>
-        </TouchableOpacity> */}
+        <TouchableOpacity
+          disabled={tableDataLoader}
+          onPress={openDrawer}
+          style={styles.drawerButton}>
+          {tableDataLoader ? (
+            <ActivityIndicator size={'large'} />
+          ) : (
+            <Text style={styles.drawerButtonText}>View Tables Details </Text>
+          )}
+        </TouchableOpacity>
         <View style={styles.notepadContainer}>
           <TextInput
             style={styles.notepad}
@@ -352,21 +473,36 @@ const Querybuilders = ({ route }) => {
         <View style={styles.tabsContainer}>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'Result' && styles.activeTab]}
-            onPress={handleResult}
-          >
-            <Text style={[styles.tabText, activeTab === 'Result' && styles.activeTabText]}>Result</Text>
+            onPress={handleResult}>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === 'Result' && styles.activeTabText,
+              ]}>
+              Result
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'Sample' && styles.activeTab]}
-            onPress={handleSample}
-          >
-            <Text style={[styles.tabText, activeTab === 'Sample' && styles.activeTabText]}>Sample</Text>
+            onPress={handleSample}>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === 'Sample' && styles.activeTabText,
+              ]}>
+              Sample
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'Keywords' && styles.activeTab]}
-            onPress={handleKeywords}
-          >
-            <Text style={[styles.tabText, activeTab === 'Keywords' && styles.activeTabText]}>Keywords</Text>
+            onPress={handleKeywords}>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === 'Keywords' && styles.activeTabText,
+              ]}>
+              Keywords
+            </Text>
           </TouchableOpacity>
         </View>
         {renderContent()}
@@ -402,21 +538,18 @@ const styles = StyleSheet.create({
     padding: 5,
     fontWeight: 'bold',
     borderWidth: 0.5,
-    height: 30,
-    width: 80
-
+    height: 40,
+    width: 80,
   },
   tableHeaderView: {
     flexDirection: 'row',
-
   },
   tableBodyText: {
     // padding: 5,
     width: 80,
-    height:20,
-    textAlign:'center',
-    borderWidth: 0.3
-
+    height: 20,
+    textAlign: 'center',
+    borderWidth: 0.3,
   },
   drawerContainer: {
     flex: 1,
