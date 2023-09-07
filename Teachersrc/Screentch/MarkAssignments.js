@@ -56,7 +56,7 @@ const MarkAssignments = ({navigation,route}) => {
     let marks = assignment.marks;
 
     try {
-      setSaveLoader(true);
+      console.log('`${Url}/Teacher/markStudentAssigment?mid=${mid}&marks=${marks}`: ', `${Url}/Teacher/markStudentAssigment?mid=${mid}&marks=${marks}`);
       let response = await axios.put(
         `${Url}/Teacher/markStudentAssigment?mid=${mid}&marks=${marks}`,
       );
@@ -67,9 +67,7 @@ const MarkAssignments = ({navigation,route}) => {
         }
         alert(data);
       }
-      setSaveLoader(false);
     } catch (error) {
-      setSaveLoader(false);
       alert(error);
     }
 
