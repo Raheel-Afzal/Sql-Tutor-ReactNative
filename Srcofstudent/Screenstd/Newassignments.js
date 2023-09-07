@@ -7,7 +7,7 @@ const Newassignments = ({ navigation, route }) => {
   const isFocused = useIsFocused()
   const [queryData, setQueryData] = useState([]);
 
-  const { sid, Semester, Section } = route.params.studentDetail
+  const { Sid, Semester, Section } = route.params.studentDetail
   console.log('studentDetail: ', route);
   const [assignments, setAssignments] = useState([]);
 
@@ -27,6 +27,7 @@ const Newassignments = ({ navigation, route }) => {
         const response = await fetch(`${Url}/Student/GetAssgs?Smester=${Semester}&section=${Section}`);
         const data = await response.json();
         const sortedAssignments = data.sort((a, b) => a.AssignmentNumber - b.AssignmentNumber);
+        console.log('sortedAssignments: ', sortedAssignments);
         // console.log('sortedAssignments: ', sortedAssignments);
 
         // Update state with the fetched data
@@ -65,7 +66,7 @@ const Newassignments = ({ navigation, route }) => {
                 <TouchableOpacity onPress={() => handleOpenFile(assignment.assignFile)}>
                   <Text style={styles.downloadText}>Download</Text>
                 </TouchableOpacity>
-                <TouchableOpacity disabled={isOverDue(assignment.Deadline)} onPress={() => navigation.navigate('Addnext', { selectedDatabase: assignment.DatabaseName })}>
+                <TouchableOpacity disabled={isOverDue(assignment.Deadline)} onPress={() => navigation.navigate('Addnext', { selectedDatabase: assignment.DatabaseName ,aid:assignment.Aid,tid:assignment.Tid,Sid})}>
                   <Text style={[styles.downloadText, { color: isOverDue(assignment.Deadline) ? COLORS.red : COLORS.blueColor }]}>Solve</Text>
                 </TouchableOpacity>
               </View>

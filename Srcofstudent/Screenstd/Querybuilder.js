@@ -13,184 +13,35 @@ import axios from 'axios';
 import {ActivityIndicator} from 'react-native';
 
 const Querybuilders = ({route}) => {
-  const {selectedDatabase} = route.params;
+  const {selectedDatabase, aid, tid, Sid} = route.params;
+
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState('Result');
   const [results, setResults] = useState([]);
   const [tableDataLoader, setTableDataLoader] = useState(false);
-  const [data, setDate] = useState([
-    {
-      ColumnNames: ['imageid', 'dressid', 'dressimage'],
-      TableName: 'DRESSIMAGE',
-    },
-    {
-      ColumnNames: [
-        'uid',
-        'did',
-        'type',
-        'name',
-        'rent',
-        'size',
-        'color',
-        'descriptin',
-        'geneder',
-        'quality',
-        'rating',
-        'status',
-      ],
-      TableName: 'DRESSINFO',
-    },
-    {
-      ColumnNames: ['feedback_id', 'oid', 'rid', 'did', 'feedback'],
-      TableName: 'FEEDBACK',
-    },
-    {
-      ColumnNames: [
-        'historyid',
-        'renterid',
-        'oid',
-        'dressid',
-        'rentstartdate',
-        'rentenddate',
-        'pickingdate',
-      ],
-      TableName: 'HISTORY',
-    },
-    {
-      ColumnNames: ['fav_id', 'userid', 'oid'],
-      TableName: 'OWNERFAVORITE',
-    },
-    {
-      ColumnNames: [
-        'rentid',
-        'renterid',
-        'oid',
-        'dressid',
-        'rentstartdate',
-        'rentenddate',
-        'pickingdate',
-        'requeststatus',
-      ],
-      TableName: 'RENT',
-    },
-    {
-      ColumnNames: [
-        'id',
-        'name',
-        'contact',
-        'city',
-        'address',
-        'gender',
-        'email',
-        'password',
-        'orating',
-        'urating',
-      ],
-      TableName: 'USERINFO',
-    },
-    {
-      ColumnNames: [
-        'wislist_id',
-        'requesterid',
-        'dressid',
-        'dress_status',
-        'availabilty_date',
-      ],
-      TableName: 'WHISHLIST',
-    },
-  ]);
-  const [accordionData, setAccordionData] = useState([
-    {
-      id: 1,
-      title: 'Amarks',
-      data: [
-        {id: 1, categoryId: 1, label: 'Sid', checked: false},
-        {id: 2, categoryId: 1, label: 'Aid', checked: false},
-        {id: 3, categoryId: 1, label: 'Amarks', checked: false},
-      ],
-    },
-    {
-      id: 2,
-      title: 'Assignment',
-      data: [
-        {id: 4, categoryId: 2, label: 'Aid', checked: false},
-        {id: 5, categoryId: 2, label: 'Atitle', checked: false},
-        {id: 6, categoryId: 2, label: 'Details', checked: false},
-      ],
-    },
-    {
-      id: 3,
-      title: 'Course',
-      data: [
-        {id: 7, categoryId: 3, label: 'Cid', checked: false},
-        {id: 8, categoryId: 3, label: 'Cname', checked: false},
-      ],
-    },
-    {
-      id: 4,
-      title: 'Enrollment',
-      data: [
-        {id: 9, categoryId: 4, label: 'Sid', checked: false},
-        {id: 10, categoryId: 4, label: 'Cid', checked: false},
-      ],
-    },
-    {
-      id: 5,
-      title: 'Query',
-      data: [
-        {id: 11, categoryId: 5, label: 'Qid', checked: false},
-        {id: 12, categoryId: 5, label: 'Sid', checked: false},
-        {id: 13, categoryId: 5, label: 'Aid', checked: false},
-        {id: 14, categoryId: 5, label: 'Qno', checked: false},
-        {id: 15, categoryId: 5, label: 'Details', checked: false},
-      ],
-    },
-    {
-      id: 6,
-      title: 'Student',
-      data: [
-        {id: 16, categoryId: 6, label: 'Fname', checked: false},
-        {id: 17, categoryId: 6, label: 'Lname', checked: false},
-        {id: 18, categoryId: 6, label: 'Smester', checked: false},
-        {id: 19, categoryId: 6, label: 'Section', checked: false},
-        {id: 20, categoryId: 6, label: 'Semail', checked: false},
-        {id: 21, categoryId: 6, label: 'Spassword', checked: false},
-      ],
-    },
-    {
-      id: 7,
-      title: 'Teach',
-      data: [
-        {id: 22, categoryId: 7, label: 'Tid', checked: false},
-        {id: 23, categoryId: 7, label: 'Cid', checked: false},
-      ],
-    },
-    {
-      id: 8,
-      title: 'Teacher',
-      data: [
-        {id: 24, categoryId: 8, label: 'Tid', checked: false},
-        {id: 25, categoryId: 8, label: 'Fname', checked: false},
-        {id: 26, categoryId: 8, label: 'Lname', checked: false},
-        {id: 27, categoryId: 8, label: 'Temail', checked: false},
-        {id: 28, categoryId: 8, label: 'Tpassword', checked: false},
-      ],
-    },
-  ]);
+  const [data, setData] = useState([]);
+
   const [expandedAccordion, setExpandedAccordion] = useState(null);
 
   const handleRunQuery = async () => {
     try {
+      //http://192.168.47.37/FYPAPI/api/QueryRun/RunQuery?aid=2042&sid=1017&databaseName=FYPDB&query=SELECT * FROM student&tid=10
+      console.log(
+        `${Url}/QueryRun/QueryRun/RunQuery?aid=${aid}sid=${Sid}&databaseName=${selectedDatabase}&query=${query}&tid=${tid}`,
+      );
       const response = await fetch(
-        // `http://localhost/FYPAPI/api/Student/RunQuery?sqlQuery=${finalQuery}`
-        `${Url}/QueryRun/RunQuery?databaseName=${selectedDatabase}&query=${query}`,
+        `${Url}/QueryRun/RunQuery?aid=${aid}&sid=${Sid}&databaseName=${selectedDatabase}&query=${query}&tid=${tid}`,
         {
           method: 'POST',
         },
       );
-      const data = await response.json();
-      console.log('data: ', data);
-      setResults(data);
+      if (response.ok) {
+        const data = await response.json();
+        setResults(data);
+      } else {
+        const data = await response.json();
+        alert(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -385,14 +236,15 @@ const Querybuilders = ({route}) => {
 
   useEffect(() => {
     if (selectedDatabase) {
-      console.log('>>>selectedDatabase: ', selectedDatabase);
+      // console.log('>>>selectedDatabase: ', selectedDatabase);
       const selectTableDetails = async () => {
         setTableDataLoader(true);
         let response = await axios.get(
           `${Url}/Teacher/GetTableColumns?databaseName=${selectedDatabase}`,
         );
         setTableDataLoader(false);
-        console.log('response: ', response.data);
+        setData(response.data);
+        // console.log('response: ', response.data);
       };
       selectTableDetails();
     }
@@ -406,21 +258,32 @@ const Querybuilders = ({route}) => {
       renderNavigationView={() => (
         <View style={styles.drawerContainer}>
           <Text style={styles.drawerHeader}>Drawer data</Text>
-          {data.map((item, index) => (
-            <TouchableOpacity
-              key={`accordion-${index}`}
-              style={styles.accordionItem}
-              onPress={() => toggleAccordion(index)}>
-              <Text style={styles.accordionTitle}>{item.TableName}</Text>
-              {expandedAccordion === index && (
-                <View style={styles.accordionContent}>
-                  {item.ColumnNames.map((columnName, itemIndex) => (
-                    <Text key={`CN-${itemIndex}`} style={{fontSize:16,marginVertical:2,paddingLeft:20}}>{columnName}</Text>
-                  ))}
-                </View>
-              )}
-            </TouchableOpacity>
-          ))}
+          <ScrollView>
+            {data.map((item, index) => (
+              <TouchableOpacity
+                key={`accordion-${index}`}
+                style={styles.accordionItem}
+                onPress={() => toggleAccordion(index)}>
+                <Text style={styles.accordionTitle}>{item.TableName}</Text>
+                {expandedAccordion === index && (
+                  <View style={styles.accordionContent}>
+                    {item.ColumnNames.map((columnName, itemIndex) => (
+                      <Text
+                        key={`CN-${itemIndex}`}
+                        style={{
+                          fontSize: 16,
+                          marginVertical: 2,
+                          paddingLeft: 20,
+                        }}>
+                        {columnName}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
           {/* {accordionData.map((item, index) => (
             <TouchableOpacity
               key={`accordion-${index}`}
@@ -509,6 +372,9 @@ const Querybuilders = ({route}) => {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleExecute}>
             <Text style={styles.buttonText}>Execute</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Save</Text>
@@ -622,7 +488,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   buttonsContainer: {
-    flexDirection: 'row',
     marginBottom: 30,
   },
   keyboardText: {
