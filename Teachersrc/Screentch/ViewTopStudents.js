@@ -5,7 +5,7 @@ import {COLORS, Url} from '../../constants';
 import axios from 'axios';
 import { Button } from 'react-native-elements';
 
-const ViewTopStudents = ({navigation}) => {
+const ViewTopStudents = ({navigation,route}) => {
   const [filter, setFilter] = useState({
     aid: '',
     section: '',
@@ -21,7 +21,7 @@ const ViewTopStudents = ({navigation}) => {
   const getAssignmentNumber = async () => {
     try {
       let response = await axios.get(
-        `${Url}/Teacher/getTeacherAssignment?teacherId=10`,
+        `${Url}/Teacher/getTeacherAssignment?teacherId=${route.params.userDetail.Tid}`,
       );
 
       let data = response.data;

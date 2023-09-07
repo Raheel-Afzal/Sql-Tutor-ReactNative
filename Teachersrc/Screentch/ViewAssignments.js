@@ -15,7 +15,7 @@ import {useIsFocused} from '@react-navigation/native';
 
 import axios from 'axios';
 
-const ViewAssignments = ({navigation}) => {
+const ViewAssignments = ({navigation,route}) => {
   const isFocused = useIsFocused();
   const [assignments, setAssignments] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -34,7 +34,7 @@ const ViewAssignments = ({navigation}) => {
     setLoader(true);
     try {
       let response = await axios.get(
-        `${Url}/Teacher/getTeacherAssignment?teacherId=10`,
+        `${Url}/Teacher/getTeacherAssignment?teacherId=${route.params.userDetail.Tid}`,
       );
 
       let data = response.data;
@@ -109,7 +109,7 @@ const ViewAssignments = ({navigation}) => {
           </View>
         ))}
       </ScrollView>
-      <View style={styles.bottomBtn}>
+      {/* <View style={styles.bottomBtn}>
         <TouchableOpacity
           style={[
             styles.actionBtn,
@@ -118,7 +118,7 @@ const ViewAssignments = ({navigation}) => {
           onPress={() => navigation.goBack()}>
           <Text style={styles.actionBtnText}>Back</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

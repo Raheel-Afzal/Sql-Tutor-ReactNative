@@ -15,7 +15,7 @@ import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
 import {CustomInput} from '../../components/CustomInput';
 
-const MarkAssignments = ({navigation}) => {
+const MarkAssignments = ({navigation,route}) => {
   const isFocused = useIsFocused();
   const [loader, setLoader] = useState(false);
   const [assignments, setAssignments] = useState([]);
@@ -36,7 +36,7 @@ const MarkAssignments = ({navigation}) => {
   const getAssignments = async () => {
     setLoader(true);
     await axios
-      .get(`${Url}/Teacher/getStudentAssignment?tid=10`)
+      .get(`${Url}/Teacher/getStudentAssignment?tid=${route.params.userDetail.Tid}`)
       .then(response => {
         const assignmentData = response.data
           .filter(data => data.submittedAssignDetail.assignMarks === -1)

@@ -74,7 +74,7 @@ const Teacheruploadass = ({navigation, route}) => {
       // Create form data
       setLoader(true);
 
-      console.log('assignment: ', assignment);
+      // console.log('assignment: ', assignment);
       if (!Object.values(assignment).every(field => field)) {
         alert('Please Fill All Data, Before Uploading');
         return;
@@ -109,11 +109,11 @@ const Teacheruploadass = ({navigation, route}) => {
     setAssignNumberloader(true);
     try {
       let response = await axios.get(
-        `${Url}/Teacher/getTeacherAssignment?teacherId=10`,
+        `${Url}/Teacher/getTeacherAssignment?teacherId=${route.params.userDetail.Tid}`,
       );
 
       let data = response.data;
-      console.log('data: ', data);
+      // console.log('data: ', data);
       if (response.status == 200) {
         setAssignment(curr => ({
           ...curr,
@@ -170,8 +170,10 @@ const Teacheruploadass = ({navigation, route}) => {
     }
 
     getDataBaseList();
-    console.log('path: ', path);
+    // console.log('path: ', path);
+    console.log("route>>>>>>>.",route)
     if (path === 'create') {
+      
       getAssignmentNumber();
     } else if (path === 'edit') {
       setDataforEdit();

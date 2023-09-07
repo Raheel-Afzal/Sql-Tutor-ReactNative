@@ -14,22 +14,22 @@ let {userDetail} = route.params
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Teacheruploadass',{path:'create' ,userDetail})}>
           <Text style={styles.buttonText}>Upload Assignment</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewAssignments')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewAssignments',{userDetail})}>
           <Text style={styles.buttonText}>View Assignment</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MarkAssignments')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MarkAssignments',{userDetail})}>
           <Text style={styles.buttonText}>Mark Assignment</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudentMarks')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudentMarks',{userDetail})}>
           <Text style={styles.buttonText}>View Student Marks</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewTopStudents')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewTopStudents',{userDetail})}>
           <Text style={styles.buttonText}>View TOP Students</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudents')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudents',{userDetail})}>
           <Text style={styles.buttonText}>View Student</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('uploadsol')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('uploadsol',{userDetail})}>
           <Text style={styles.buttonText}>UpLoad Solution</Text>
         </TouchableOpacity>
 

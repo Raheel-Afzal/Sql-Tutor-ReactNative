@@ -11,6 +11,7 @@ import axios from 'axios';
 
 const TeacheruploadassWithQuestionText = ({navigation, route}) => {
   let {path} = route.params;
+  console.log('route.params: ', route.params);
   const isFocused = useIsFocused();
   const [loader, setLoader] = useState(false);
   const [assignNumberloader, setAssignNumberloader] = useState(false);
@@ -109,7 +110,7 @@ const TeacheruploadassWithQuestionText = ({navigation, route}) => {
     setAssignNumberloader(true);
     try {
       let response = await axios.get(
-        `${Url}/Teacher/getTeacherAssignment?teacherId=10`,
+        `${Url}/Teacher/getTeacherAssignment?teacherId=${route.params.userDetail.Tid}`,
       );
 
       let data = response.data;
