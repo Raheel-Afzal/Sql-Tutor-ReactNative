@@ -9,20 +9,13 @@ const Newassignments = ({ navigation, route }) => {
 
   const { sid, Semester, Section } = route.params.studentDetail
   console.log('studentDetail: ', route);
-  const [assignments, setAssignments] = useState([
-    { id: 1, title: 'Assignment 1', checked: false, url: 'https://gbihr.org/images/docs/test.pdf', Database: 'FYP2', lastDate: '2023-06-08 18:00PM' },
-    { id: 2, title: 'Assignment 2', checked: false, url: 'https://filesamples.com/formats/pdf', Database: 'Task1', lastDate: '2023-06-10 14:00PM' },
-    { id: 3, title: 'Assignment 3', checked: false, url: 'https://www.ucd.ie/t4cms/Test%20PDF-8mb.pdf', Database: 'Task2', lastDate: '2023-06-13 12:00AM' },
-    { id: 4, title: 'Assignment 4', checked: false, url: 'https://icseindia.org/document/sample.pdf', Database: 'Task3', lastDate: '2023-06-16 20:00AM' },
-    { id: 5, title: 'Assignment 5', checked: false, url: 'https://www.novapdf.com/wpub/downloads/samples/pdf-example-bookmarks.pdf', Database: 'Task4', lastDate: '2023-06-18 16:00PM' },
-    { id: 6, title: 'Assignment 6', checked: false, url: 'https://assets.website-files.com/6026a1a0afd16a6f17bbfd66/60ab82e17fc04754ed61773a_dummy.pdf', Database: 'Task5', lastDate: '2023-03-08 11:00PM' },
-    { id: 7, title: 'Assignment 7', checked: false, url: 'SampleDocs-sample-pdf-file.pdf', Database: 'Task6', lastDate: '2023-09-08 22:00PM' },
-  ]);
+  const [assignments, setAssignments] = useState([]);
 
-  const handleOpenFile = (assignmentId) => {
-    const downloadUrl = `${Url}/Student/DownloadSolution?assignmentId=${assignmentId}`;
+  const handleOpenFile = (file) => {
+    console.log('file: ', file);
+    // const downloadUrl = `${Url}/Student/DownloadAssignment?assignmentId=${assignmentId}`;
 
-    Linking.openURL(downloadUrl);
+    Linking.openURL(`http://192.168.18.252/FYPAPI/Uploads/${file}`);
   };
 
 
@@ -69,7 +62,7 @@ const Newassignments = ({ navigation, route }) => {
                 <Text style={styles.assignmentNumber}>{assignment.Title}</Text>
                 <Text style={styles.assignmentInfo}>Due Data: {isOverDue(assignment.Deadline) ? "Due Date is Over" : new Date(assignment.Deadline).toLocaleDateString()}</Text>
                 <Text style={styles.assignmentInfo}>Database {assignment.DatabaseName}</Text>
-                <TouchableOpacity onPress={() => handleOpenFile(assignment.Aid)}>
+                <TouchableOpacity onPress={() => handleOpenFile(assignment.assignFile)}>
                   <Text style={styles.downloadText}>Download</Text>
                 </TouchableOpacity>
                 <TouchableOpacity disabled={isOverDue(assignment.Deadline)} onPress={() => navigation.navigate('Addnext', { selectedDatabase: assignment.DatabaseName })}>

@@ -23,25 +23,32 @@ const Teacherlogin = ({navigation}) => {
   const handleLogin = async () => {
     // Perform API call to verify login credentials
     setLoader(true);
-    let response = await fetch(
-      `${Url}/Teacher/LoginTeacher?Temail=${email}&Tpassword=${password}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    setLoader(false);
+    {
+      try {
+        let response = await fetch(
+          `${Url}/Teacher/LoginTeacher?Temail=${email}&Tpassword=${password}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        setLoader(false);
 
-    if (response.ok) {
-      let json = await response.json();
-      navigation.navigate('Teacherdashboard', {userDetail: json});
-    } else if (response.status == 404) {
-      let json = await response.json();
-      alert(json);
-    } else {
-      alert('login failed');
+        if (response.ok) {
+          let json = await response.json();
+          navigation.navigate('Teacherdashboard', {userDetail: json});
+        } else if (response.status == 404) {
+          let json = await response.json();
+          alert(json);
+        } else {
+          alert('login failed');
+        }
+      } catch (error) {
+        alert(error)
+        setLoader(false);
+      }
     }
   };
 
@@ -79,7 +86,10 @@ const Teacherlogin = ({navigation}) => {
             <Text>{showPassword ? 'Hide' : 'Show'}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity disabled={loader}  style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity
+          disabled={loader}
+          style={styles.button}
+          onPress={handleLogin}>
           {loader ? (
             <ActivityIndicator size={'large'} />
           ) : (
