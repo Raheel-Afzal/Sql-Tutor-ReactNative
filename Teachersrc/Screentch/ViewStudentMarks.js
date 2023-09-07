@@ -15,23 +15,12 @@ import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
 import {CustomInput} from '../../components/CustomInput';
 
-const MarkAssignments = ({navigation}) => {
+const ViewStudentMarks = ({navigation}) => {
   const isFocused = useIsFocused();
   const [loader, setLoader] = useState(false);
   const [assignments, setAssignments] = useState([]);
 
-  const handleDelete = Aid => {
-    // Send a DELETE request to the API endpoint
-    fetch(`${Url}/Teacher/DeleteAssignment?Aid=${Aid}`, {
-      method: 'DELETE',
-    })
-      .then(message => {
-        console.log('message: ', message);
-        alert(message.json());
-        getAssignments();
-      })
-      .catch(error => console.error(error));
-  };
+ 
 
   const getAssignments = async () => {
     setLoader(true);
@@ -39,7 +28,7 @@ const MarkAssignments = ({navigation}) => {
       .get(`${Url}/Teacher/getStudentAssignment?tid=10`)
       .then(response => {
         const assignmentData = response.data
-          .filter(data => data.submittedAssignDetail.assignMarks === -1)
+          .filter(data => data.submittedAssignDetail.assignMarks !== -1)
           .map(data => ({...data, marks: ''}));
         console.log('assignmentData: ', assignmentData);
 
@@ -124,21 +113,12 @@ const MarkAssignments = ({navigation}) => {
                 Qno: {assignment.assignDetail.QuestionText}
               </Text>
               <Text style={styles.descriptionText}>
-              Answer: {assignment.submittedAssignDetail.answer}
+                Answer: {assignment.submittedAssignDetail.answer}
               </Text>
-
-              <View style={styles.actionBtnContainer}>
-                <CustomInput
-                  placeholder={'0'}
-                  value={assignment.marks}
-                  onChangeText={newText => handleMarksChange(newText, index)}
-                />
-                <TouchableOpacity
-                  style={[styles.actionBtn, styles.editBtn]}
-                  onPress={() => handleSaveMarks(assignment)}>
-                  <Text style={styles.actionBtnText}>Save Marks</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.titleText}>
+                ASSIGNMENT OBTAINED NUMBER: {assignment.submittedAssignDetail.assignMarks}
+              </Text>
+            
             </View>
           </View>
         ))}
@@ -267,4 +247,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MarkAssignments;
+export default ViewStudentMarks;

@@ -24,6 +24,9 @@ import Studentlogin from './Srcofstudent/Screenstd/Studentlogin';
 import TeacherUploadAssTask1 from './Teachersrc/Screentch/TeacherUploadAssTask1';
 import TeacherUploadDropDown from './Teachersrc/Screentch/TeacherUploadDropDown';
 import TeacheruploadassWithQuestionText from './Teachersrc/Screentch/TeacheruploadassWithQuestionText';
+import ViewStudentMarks from './Teachersrc/Screentch/ViewStudentMarks';
+import ViewTopStudents from './Teachersrc/Screentch/ViewTopStudents';
+import SelectTopStudent from './Teachersrc/Screentch/SelectTopStudent';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,6 +37,9 @@ function Teacherside() {
     <Stack.Navigator>
       <Stack.Screen name="Biitdatabasepanel" component={Biitdatabasepanel}  options={{ headerShown: false }}/>
       <Stack.Screen name="Teacherlogin" component={Teacherlogin} />
+      <Stack.Screen name="ViewStudentMarks" component={ViewStudentMarks} />
+      <Stack.Screen name="ViewTopStudents" component={ViewTopStudents} />
+      <Stack.Screen name="SelectTopStudent" component={SelectTopStudent} />
       <Stack.Screen name="Teacherdashboard" component={Teacherdashboard} />
       <Stack.Screen name="Teacheruploadass" component={TeacheruploadassWithQuestionText} />
       <Stack.Screen name="uploadsol" component={AssignmentSolPage} />

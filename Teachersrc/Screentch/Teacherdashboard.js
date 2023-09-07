@@ -20,6 +20,12 @@ let {userDetail} = route.params
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MarkAssignments')}>
           <Text style={styles.buttonText}>Mark Assignment</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudentMarks')}>
+          <Text style={styles.buttonText}>View Student Marks</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewTopStudents')}>
+          <Text style={styles.buttonText}>View TOP Students</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewStudents')}>
           <Text style={styles.buttonText}>View Student</Text>
         </TouchableOpacity>
@@ -40,15 +46,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-
     alignItems: 'center',
     justifyContent: 'center',
   },
-  header: {
 
-    marginBottom: 100,
-
-  },
   headerText: {
     fontSize: 35,
     fontWeight: 'bold',
