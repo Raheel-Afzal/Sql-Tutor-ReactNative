@@ -1,1 +1,1 @@
-export const Url = "http://192.168.47.37/FYPAPI/api";
+export const Url = "http://192.168.18.252/FYPAPI/api";

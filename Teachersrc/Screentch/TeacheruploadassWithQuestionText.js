@@ -9,7 +9,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 
-const Teacheruploadass = ({navigation, route}) => {
+const TeacheruploadassWithQuestionText = ({navigation, route}) => {
   let {path} = route.params;
   const isFocused = useIsFocused();
   const [loader, setLoader] = useState(false);
@@ -286,7 +286,7 @@ const Teacheruploadass = ({navigation, route}) => {
   );
 };
 
-export default Teacheruploadass;
+export default TeacheruploadassWithQuestionText;
 const styles = StyleSheet.create({
   screenContainer: {
     paddingHorizontal: 20,
